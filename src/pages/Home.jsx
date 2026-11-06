@@ -1,89 +1,61 @@
-import { useLayoutEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'motion/react'
-import gsap from 'gsap'
-import NetworkBackground from '../components/NetworkBackground.jsx'
+import Split from '../components/Split.jsx'
+import Reveal from '../components/Reveal.jsx'
+import Liquid from '../components/Liquid.jsx'
 import Counter from '../components/Counter.jsx'
-import photo from '../assets/photo.webp'
+import cutout from '../assets/cutout.webp'
+import { marquee } from '../data/about.js'
 import { projects } from '../data/projects.js'
 import { totalSkills, languageCount } from '../data/skills.js'
 
-const headline = "Hi, I'm an IT Student & Tech Enthusiast.".split(' ')
+const roles = ['IT Student', 'Developer', 'Hardware', 'Networking']
+const name = ['Daniel', 'Idanan']
 
 export default function Home() {
-  const hero = useRef(null)
-
-  // One orchestrated moment: the headline rises word by word, then the rest follows.
-  useLayoutEffect(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-        tl.from('.word', { yPercent: 110, duration: 0.7, stagger: 0.07 })
-          .from('.hero__fade', { opacity: 0, y: 12, duration: 0.5, stagger: 0.1 }, '-=0.3')
-          .from('.hero__photo', { opacity: 0, scale: 0.96, duration: 0.6 }, '<')
-      }, hero)
-      return () => ctx.revert()
-    })
-    return () => mm.revert()
-  }, [])
-
   return (
     <>
-      <section className="hero" ref={hero}>
-        <NetworkBackground />
-        <div className="hero__inner">
-          <div className="hero__text">
-            <h1 className="hero__title" aria-label="Hi, I'm an IT Student & Tech Enthusiast.">
-              {headline.map((w, i) => (
-                <span key={i} aria-hidden="true">
-                  <span className="word-mask">
-                    <span className="word">{w}</span>
-                  </span>{' '}
-                </span>
-              ))}
-            </h1>
-            <p className="hero__lead hero__fade">
-              I am a third-year Bachelor of Science in Information Technology student at Gordon
-              College in Olongapo City. Merging a passion for technology with creative
-              problem-solving, I specialize in hands-on hardware and networking projects. I am
-              always eager to learn new systems, tackle unique tech challenges, and expand my
-              skillset. Explore my work below!
-            </p>
-            <div className="hero__actions hero__fade">
-              <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: 0.12 }}>
-                <Link to="/projects" className="btn btn--solid">
-                  See my projects
-                </Link>
-              </motion.div>
-              <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: 0.12 }}>
-                <Link to="/contact" className="btn btn--outline">
-                  Get in touch
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-          <figure className="hero__photo">
-            <img src={photo} alt="Portrait of Daniel D. Idanan" width="320" height="320" />
-            <figcaption>Daniel D. Idanan, BSIT 3C</figcaption>
-          </figure>
+      <section id="top">
+        <div className="hrow">
+          <h2 className="roles d">
+            {roles.map((r, i) => <Split key={r} className="ln" mode="line" text={r} at={2700 + i * 80} />)}
+          </h2>
+          <Reveal as="p" className="hdesc" y={16} t=".52s" at={2900}>
+            Hi, I'm an IT Student &amp; Tech Enthusiast. I am a third-year Bachelor of Science in
+            Information Technology student at Gordon College in Olongapo City. Merging a passion for
+            technology with creative problem-solving, I specialize in hands-on hardware and
+            networking projects. Explore my work below!
+          </Reveal>
+        </div>
+        <div className="hport">
+          <Liquid bare max={30} src={cutout} alt="Portrait of Daniel D. Idanan" />
+        </div>
+        <div className="hgrad" />
+        <h1 className="name d" aria-label="Daniel Idanan">
+          {name.map((n, i) => <Split key={n} className="ln" mode="l" step={52} text={n} at={2500 + i * 240} />)}
+        </h1>
+        <Reveal className="cue" at={3400}>Scroll to enter</Reveal>
+      </section>
+
+      <section className="mq" aria-label="What drives me">
+        <div className="track d">
+          {[...marquee, ...marquee].map((w, i) => <span key={i}>{w}</span>)}
         </div>
       </section>
 
-      <section className="stats" aria-label="At a glance">
-        <dl className="stats__inner">
-          <div className="stat">
-            <dt>Projects shown here</dt>
-            <dd><Counter end={projects.length} /></dd>
-          </div>
-          <div className="stat">
-            <dt>Tools and technologies</dt>
-            <dd><Counter end={totalSkills} /></dd>
-          </div>
-          <div className="stat">
-            <dt>Programming languages</dt>
-            <dd><Counter end={languageCount} /></dd>
-          </div>
+      <section className="pad">
+        <div className="eb">By The Numbers</div>
+        <Split as="h2" className="d h2" style={{ marginTop: '1.5rem' }} text="Measured so far." step={60} />
+        <dl className="st-l">
+          {[
+            [projects.length, '', 'Projects shown here'],
+            [totalSkills, '', 'Tools and technologies'],
+            [languageCount, '', 'Programming languages'],
+            [3, 'rd', 'Year, BSIT at Gordon College'],
+          ].map(([end, suffix, label], i) => (
+            <Reveal key={label} className="st" delay={i * 110} t=".56s">
+              <dd className="d"><Counter end={end} />{suffix}</dd>
+              <dt>{label}</dt>
+            </Reveal>
+          ))}
         </dl>
       </section>
     </>

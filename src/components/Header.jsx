@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const links = [
@@ -8,23 +9,28 @@ const links = [
 ]
 
 export default function Header() {
+  const [open, setOpen] = useState(false)
+  const close = () => setOpen(false)
   return (
-    <header className="site-header">
-      <div className="site-header__inner">
-        <NavLink to="/" className="brand">
-          Daniel Idanan
+    <header className={open ? 'open' : ''}>
+      <nav className="top" aria-label="Primary">
+        <NavLink to="/" className="logo" onClick={close}>
+          <span className="mono">DI</span>
+          <span className="nm">Daniel Idanan</span>
         </NavLink>
-        <nav aria-label="Main">
-          <ul className="nav">
-            {links.map((l) => (
-              <li key={l.to}>
-                <NavLink to={l.to} end className="nav__link">
-                  {l.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <ul className="links">
+          {links.map((l) => (
+            <li key={l.to}><NavLink to={l.to} end>{l.label}</NavLink></li>
+          ))}
+        </ul>
+        <button className="burger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+          <i /><i /><i />
+        </button>
+      </nav>
+      <div id="menu">
+        {links.map((l, i) => (
+          <NavLink key={l.to} to={l.to} end className="d" style={{ '--i': i }} onClick={close}>{l.label}</NavLink>
+        ))}
       </div>
     </header>
   )

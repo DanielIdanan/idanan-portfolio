@@ -1,20 +1,15 @@
-import { contacts } from '../data/contact.js'
+import Split from '../components/Split.jsx'
+import Reveal from '../components/Reveal.jsx'
 
 export default function Contact() {
   return (
-    <div className="page">
-      <h1 className="page__title">Contact</h1>
-      <p className="prose">
-        <span>Email or call me about projects, internships, or anything tech.</span>
-      </p>
-      <ul className="contacts">
-        {contacts.map((c) => (
-          <li key={c.label}>
-            <span className="contacts__label">{c.label}</span>
-            <a href={c.href}>{c.value}</a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section id="contact" style={{ paddingTop: '12rem' }}>
+      <div className="eb">Let's Build</div>
+      <Split as="h2" className="d" text="Let's work on something real." step={60} />
+      <Reveal as="p" className="lead">Open to internships, projects, and tech challenges. Email or call me.</Reveal>
+      <div className="mail">
+        <a href="mailto:itzme.guyzzz@gmail.com">itzme.guyzzz@gmail.com <em>↗</em></a>
+      </div>
+    </section>
   )
 }

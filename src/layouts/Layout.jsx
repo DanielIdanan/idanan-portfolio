@@ -1,44 +1,40 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
-import { motion } from 'motion/react'
 import Header from '../components/Header.jsx'
 import Footer from '../components/Footer.jsx'
+import Preloader from '../components/Preloader.jsx'
 
-let lenis = null
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export default function Layout() {
   const { pathname } = useLocation()
+  const lenis = useRef(null)
 
-  // Smooth scrolling (skipped when the visitor prefers reduced motion).
+  // Smooth scroll; locked until the preloader finishes.
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    lenis = new Lenis({ autoRaf: true })
-    return () => {
-      lenis.destroy()
-      lenis = null
-    }
+    if (reduce) return
+    const l = new Lenis({ autoRaf: true })
+    l.stop()
+    lenis.current = l
+    return () => { l.destroy(); lenis.current = null }
   }, [])
 
-  // Start each page at the top.
   useEffect(() => {
-    if (lenis) lenis.scrollTo(0, { immediate: true })
+    if (lenis.current) lenis.current.scrollTo(0, { immediate: true })
     else window.scrollTo(0, 0)
   }, [pathname])
 
+  const unlock = useCallback(() => lenis.current?.start(), [])
+
   return (
-    <div className="shell">
+    <>
+      {!reduce && <Preloader onDone={unlock} />}
       <Header />
-      <motion.main
-        key={pathname}
-        id="main"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
-      >
+      <main id="main">
         <Outlet />
-      </motion.main>
+      </main>
       <Footer />
-    </div>
+    </>
   )
 }
