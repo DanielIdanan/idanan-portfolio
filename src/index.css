@@ -178,3 +178,8 @@ main{min-height:100svh}
 .lq.shift img{transform:translate(var(--mx,0px),var(--my,0px)) scale(1.06);transition:transform .45s var(--ex)}
 .sw span{color:var(--fg)}
 @media(prefers-reduced-motion:reduce){.wipe,.cursor{display:none}}
+.bl{display:grid;gap:.9rem}
+.bl li{position:relative;padding-left:2rem;font-size:1.75rem;line-height:1.3;font-weight:500;letter-spacing:-.01em;animation:bli .5s var(--ex) both;animation-delay:calc(var(--i)*70ms)}
+.bl li::before{content:"";position:absolute;left:0;top:.55em;width:.6rem;height:.6rem;border-radius:9999px;background:var(--accent)}
+@keyframes bli{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.bl li{animation:none}}

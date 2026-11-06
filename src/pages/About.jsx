@@ -38,7 +38,9 @@ function Skills() {
         </ul>
         <div className="fp">
           <blockquote>
-            <Split key={active} as="p" className="q" text={g.items.join(', ')} step={22} />
+            <ul className="bl" key={active}>
+              {g.items.map((item, i) => <li key={item} style={{ '--i': i }}>{item}</li>)}
+            </ul>
             <footer>{g.label}</footer>
           </blockquote>
           <Reveal className="fpw" sc="1.06" t=".64s">
