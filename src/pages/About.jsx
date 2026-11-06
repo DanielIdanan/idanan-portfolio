@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Split from '../components/Split.jsx'
 import Reveal from '../components/Reveal.jsx'
+import { motion, useScroll, useMotionValueEvent } from 'motion/react'
+import { useRef } from 'react'
+import ScrollWords from '../components/ScrollWords.jsx'
 import Liquid from '../components/Liquid.jsx'
 import photo from '../assets/photo.webp'
 import { bio, ojt } from '../data/about.js'
@@ -47,6 +50,28 @@ function Skills() {
   )
 }
 
+// A cable that draws down the OJT list as you scroll; each item's node lights up when reached.
+function Cable() {
+  const ref = useRef(null)
+  const [lit, setLit] = useState(0)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.75', 'end 0.55'] })
+  useMotionValueEvent(scrollYProgress, 'change', (v) => setLit(Math.min(ojt.length, Math.floor(v * ojt.length + 0.7))))
+  return (
+    <div className="cable" ref={ref}>
+      <span className="cable__line"><motion.span className="cable__fill" style={{ scaleY: scrollYProgress }} /></span>
+      <ul>
+        {ojt.map(([title, text], i) => (
+          <Reveal as="li" className="pr" key={title} delay={i * 90} t=".56s">
+            <span className={'node' + (lit > i ? ' on' : '')} />
+            <span className="n">0{i + 1}</span>
+            <div><h3>{title}</h3><p>{text}</p></div>
+          </Reveal>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function About() {
   return (
     <>
@@ -55,19 +80,12 @@ export default function About() {
           <div>
             <div className="eb">About Me</div>
             <Split as="h2" className="d" text="Hands-on problem solving." step={60} />
-            <Reveal as="p" className="lead">{bio[0]}</Reveal>
-            <Reveal as="p" className="lead" delay={90}>{bio[1]}</Reveal>
+            <ScrollWords text={bio[0]} />
+            <ScrollWords text={bio[1]} />
           </div>
           <div>
             <div className="eb" style={{ marginBottom: '1.5rem' }}>OJT at the City Assessor's Office</div>
-            <ul>
-              {ojt.map(([title, text], i) => (
-                <Reveal as="li" className="pr" key={title} delay={i * 90} t=".56s">
-                  <span className="n">0{i + 1}</span>
-                  <div><h3>{title}</h3><p>{text}</p></div>
-                </Reveal>
-              ))}
-            </ul>
+            <Cable />
           </div>
         </div>
       </section>

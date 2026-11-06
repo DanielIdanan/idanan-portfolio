@@ -1,3 +1,6 @@
+import { useRef } from 'react'
+import Marquee from '../components/Marquee.jsx'
+import { useParallax } from '../lib/useParallax.js'
 import Split from '../components/Split.jsx'
 import Reveal from '../components/Reveal.jsx'
 import Liquid from '../components/Liquid.jsx'
@@ -11,6 +14,10 @@ const roles = ['IT Student', 'Developer', 'Hardware', 'Networking']
 const name = ['Daniel', 'Idanan']
 
 export default function Home() {
+  const nameRef = useRef(null)
+  const portRef = useRef(null)
+  useParallax(nameRef, 0.32)
+  useParallax(portRef, 0.1)
   return (
     <>
       <section id="top">
@@ -25,21 +32,17 @@ export default function Home() {
             networking projects. Explore my work below!
           </Reveal>
         </div>
-        <div className="hport">
+        <div className="hport" ref={portRef}>
           <Liquid bare max={30} src={cutout} alt="Portrait of Daniel D. Idanan" />
         </div>
         <div className="hgrad" />
-        <h1 className="name d" aria-label="Daniel Idanan">
+        <h1 className="name d" aria-label="Daniel Idanan" ref={nameRef}>
           {name.map((n, i) => <Split key={n} className="ln" mode="l" step={52} text={n} at={2500 + i * 240} />)}
         </h1>
         <Reveal className="cue" at={3400}>Scroll to enter</Reveal>
       </section>
 
-      <section className="mq" aria-label="What drives me">
-        <div className="track d">
-          {[...marquee, ...marquee].map((w, i) => <span key={i}>{w}</span>)}
-        </div>
-      </section>
+      <Marquee words={marquee} />
 
       <section className="pad">
         <div className="eb">By The Numbers</div>

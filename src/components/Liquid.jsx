@@ -2,7 +2,7 @@ import { useId, useRef } from 'react'
 import { animate } from 'motion'
 
 // Image with an SVG displacement filter that wobbles on hover (spring: stiffness 140, damping 13).
-export default function Liquid({ src, alt, max = 28, bare = false, className = '', style }) {
+export default function Liquid({ src, alt, max = 28, bare = false, shift = false, className = '', style }) {
   const id = 'lq' + useId().replace(/:/g, '')
   const turb = useRef(null), disp = useRef(null), veil = useRef(null), glow = useRef(null)
   const cur = useRef(0), anim = useRef(null)
@@ -23,8 +23,15 @@ export default function Liquid({ src, alt, max = 28, bare = false, className = '
     })
   }
 
+  const tilt = (e) => {
+    if (!matchMedia('(hover:hover) and (min-width:769px)').matches) return
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty('--mx', -((e.clientX - r.left) / r.width - 0.5) * 24 + 'px')
+    e.currentTarget.style.setProperty('--my', -((e.clientY - r.top) / r.height - 0.5) * 24 + 'px')
+  }
+
   return (
-    <figure className={'lq ' + className} style={style} onMouseEnter={() => go(1)} onMouseLeave={() => go(0)}>
+    <figure className={'lq ' + (shift ? 'shift ' : '') + className} style={style} onMouseEnter={() => go(1)} onMouseLeave={(e) => { go(0); if (shift) { e.currentTarget.style.setProperty('--mx', '0px'); e.currentTarget.style.setProperty('--my', '0px') } }} onMouseMove={shift ? tilt : undefined}>
       <svg style={{ position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
         <filter id={id}>
           <feTurbulence ref={turb} type="fractalNoise" baseFrequency="0.009" numOctaves="2" result="n" />
