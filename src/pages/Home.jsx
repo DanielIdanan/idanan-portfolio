@@ -44,6 +44,7 @@ export default function Home() {
     return () => ctx.revert()
   }, [])
 
+  const url = (p) => import.meta.env.BASE_URL.replace(/\/$/, '') + p
   const to = (path) => (e) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return
     e.preventDefault()
@@ -76,7 +77,7 @@ export default function Home() {
           <span>IT Student / Developer</span>
         </Reveal>
 
-        <a href="/projects" onClick={to('/projects')} className="harrow" aria-label="View projects">→</a>
+        <a href={url('/projects')} onClick={to('/projects')} className="harrow" aria-label="View projects">→</a>
         <Reveal className="cue" at={3950}>Scroll down</Reveal>
       </section>
 
@@ -85,7 +86,7 @@ export default function Home() {
         <ul className="rows">
           {projects.map((p, i) => (
             <li key={p.title} className="row">
-              <a href="/projects" onClick={to('/projects')}>
+              <a href={url('/projects')} onClick={to('/projects')}>
                 <span className="lab">0{i + 1}</span>
                 <h3>{p.title}</h3>
                 <p>{p.description}</p>
@@ -98,7 +99,7 @@ export default function Home() {
 
       <section className="pad cta">
         <Split className="d" text="Open to internships." />
-        <a href="/contact" onClick={to('/contact')} className="btn">Say hello →</a>
+        <a href={url('/contact')} onClick={to('/contact')} className="btn">Say hello →</a>
       </section>
     </div>
   )

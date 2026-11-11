@@ -37,7 +37,7 @@ export default function Dock() {
         <ul className="dock-list">
           {items.map((it, i) => (
             <li key={it.to} style={{ '--i': i, '--n': items.length - i }}>
-              <a href={it.to} className={pathname === it.to ? 'on' : ''} aria-current={pathname === it.to ? 'page' : undefined} tabIndex={open ? 0 : -1} onClick={nav(it.to)}>
+              <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + it.to} className={pathname === it.to ? 'on' : ''} aria-current={pathname === it.to ? 'page' : undefined} tabIndex={open ? 0 : -1} onClick={nav(it.to)}>
                 <span className="dock-lab">{it.label}</span>
                 <span className="dock-ic">{it.icon}</span>
               </a>
