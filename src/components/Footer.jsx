@@ -10,8 +10,8 @@ export default function Footer() {
         </div>
         <nav className="soc" aria-label="Contact">
           <ul style={{ display: 'grid', gap: '.5rem' }}>
-            {contacts.filter((c) => c.label !== 'Personal email').map((c) => (
-              <li key={c.label}><a href={c.href}>{c.value}</a></li>
+            {contacts.filter((c) => ['School email', 'GitHub'].includes(c.label)).map((c) => (
+              <li key={c.label}><a href={c.href} {...(c.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{c.value}</a></li>
             ))}
           </ul>
         </nav>

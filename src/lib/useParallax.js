@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
+import { reduce } from './motion.js'
 
-const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // Moves an element at a fraction of the scroll speed (uses the independent `translate` property).
 export function useParallax(ref, factor) {

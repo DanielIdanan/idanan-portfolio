@@ -1,34 +1,38 @@
+import { useState } from 'react'
+import ProjectModal from '../components/ProjectModal.jsx'
+import ProjectShot from '../components/ProjectShot.jsx'
 import Split from '../components/Split.jsx'
 import Reveal from '../components/Reveal.jsx'
-import Liquid from '../components/Liquid.jsx'
-import Cursor from '../components/Cursor.jsx'
 import { projects } from '../data/projects.js'
 
+// One case per row; the image and the text swap sides down the page.
 export default function Projects() {
+  const [open, setOpen] = useState(null)
   return (
-    <section className="pad" style={{ paddingTop: '12rem' }}>
-      <Cursor />
+    <section className="pad pt-top">
       <div className="vh">
         <div>
-          <div className="eb">Selected Projects</div>
-          <Split as="h2" className="d" style={{ marginTop: '1.5rem', maxWidth: '14ch', lineHeight: 0.95 }} text="What I've built." step={60} />
+          <Split className="d" style={{ maxWidth: '14ch', lineHeight: 0.95 }} text="Projects." />
         </div>
         <p className="lab">0{projects.length} / Projects</p>
       </div>
-      <ul className="vl">
+      <ul className="pjs">
         {projects.map((p, i) => (
-          <Reveal as="li" className="vc" key={p.title} y={60} t=".62s" delay={(i % 2) * 120}>
-            <article>
-              <Liquid shift max={28} src={p.image} alt={p.alt} style={{ aspectRatio: '16/11', borderRadius: '.125rem', background: 'var(--surface)' }} />
-              <div className="vr">
-                <div className="vn"><h3>{p.title}</h3><p>{p.description}</p></div>
-                <div className="vy"><span className="lab">{p.tag}</span><b>{p.status}</b></div>
-              </div>
-              <p className="vcat">{p.category}</p>
-            </article>
+          <Reveal as="li" key={p.title} className="pj" y={50} t=".7s">
+            <button className="pj-img" onClick={() => setOpen(p)} aria-label={`Open ${p.title}`}>
+              <ProjectShot project={p} />
+            </button>
+            <div className="pj-t">
+              <p className="lab">0{i + 1} / {p.tag}</p>
+              <h3>{p.title}</h3>
+              <p className="pj-d">{p.description}</p>
+              <p className="pj-m">{p.category} · {p.status}</p>
+              <button className="pj-go" onClick={() => setOpen(p)}>Open project <span aria-hidden="true">↗</span></button>
+            </div>
           </Reveal>
         ))}
       </ul>
+      <ProjectModal project={open} onClose={() => setOpen(null)} />
     </section>
   )
 }

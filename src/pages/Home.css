@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap");
+
+:root {
+  --bg: #d9d9d9;        /* light grey canvas */
+  --block: #7b7b7b;     /* mid grey panel behind the photo */
+  --ink: #0b0b0b;       /* near-black text */
+  --muted: #4a4a4a;
+}
+
+.home {
+  position: relative;
+  min-height: calc(100vh - 64px); /* adjust to your Header height */
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Ubuntu", system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.home__name {
+  position: absolute;
+  left: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  font-size: clamp(4rem, 14vw, 13rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  z-index: 3;
+}
+
+.home__index {
+  position: absolute;
+  left: 4vw;
+  bottom: 6vh;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  z-index: 3;
+}
+
+.home__intro {
+  position: absolute;
+  left: 5vw;
+  top: 9vh;
+  max-width: 340px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--muted);
+  z-index: 3;
+}
+.home__intro p { margin: 0.4rem 0 0; }
+.home__label { font-weight: 700; color: var(--ink); letter-spacing: 0.1em; font-size: 0.75rem; }
+
+.home__block {
+  position: absolute;
+  left: 38%;
+  right: 0;
+  top: 52%;
+  bottom: 9%;
+  background: var(--block);
+  z-index: 1;
+}
+
+.home__photo {
+  position: absolute;
+  right: 12vw;
+  bottom: 0;
+  height: 96%;
+  max-width: 55vw;
+  object-fit: contain;
+  object-position: bottom;
+  z-index: 2;
+  filter: contrast(1.05);
+}
+
+.home__tag {
+  position: absolute;
+  right: 3vw;
+  top: 9vh;
+  writing-mode: vertical-rl;
+  border-right: 2px solid var(--ink);
+  padding-right: 0.7rem;
+  display: flex;
+  gap: 0.9rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  z-index: 3;
+}
+
+.home__arrow {
+  position: absolute;
+  left: 38%;
+  bottom: 9%;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 1.5rem;
+  text-decoration: none;
+  z-index: 3;
+  transition: transform 0.2s ease;
+}
+.home__arrow:hover { transform: translateX(6px); }
+
+@media (max-width: 760px) {
+  .home { min-height: 100svh; }
+  .home__name { top: 30%; font-size: 22vw; }
+  .home__intro { top: auto; bottom: 4vh; left: 5vw; right: 5vw; max-width: none; }
+  .home__block { left: 15%; top: 45%; bottom: 25%; }
+  .home__photo { right: 0; height: 70%; max-width: 90vw; bottom: 22%; }
+  .home__arrow { left: auto; right: 5vw; bottom: 4vh; }
+  .home__index { display: none; }
+}

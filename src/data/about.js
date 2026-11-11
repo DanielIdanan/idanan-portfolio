@@ -1,11 +1,10 @@
 export const bio = [
-  'I am a third-year Bachelor of Science in Information Technology student at Gordon College, Olongapo City. My technical journey is driven by a deep interest in the intersection of technology and creativity, with a strong focus on hardware configuration and networking infrastructure.',
-  'As an aspiring IT professional, I am dedicated to continuous learning and technical growth. I thrive on hands-on problem solving and am actively seeking opportunities to apply my skills to real-world projects.',
+  "I'm a third-year BSIT student at Gordon College in Olongapo City. I like the point where tech meets creativity, and most of my time goes into hardware setup and networking.",
+  "I learn best by doing, so I'm looking for real projects where I can put my skills to work and get better.",
 ]
 export const ojt = [
-  ['Built a system for the staff', "My primary responsibility was to develop a system designed to streamline the staff's workflow."],
-  ['Encoded hardcopy records', 'Prior to this, I encoded data from hardcopy records into their legacy system.'],
-  ['Troubleshot printers', 'I provided technical support by troubleshooting printers.'],
-  ['Cabling and printing', 'I managed network cabling and assisted with various printing tasks.'],
+  ['Built a system for the staff', 'I built AssessCore, a register of property owners and assessments for the office.'],
+  ['Encoded hardcopy records', 'Before that, I typed records from paper files into their old system.'],
+  ['Fixed printers', 'I troubleshot printer problems whenever they came up.'],
+  ['Cabling and printing', 'I did network cabling and helped out with printing jobs.'],
 ]
-export const marquee = ['Learn Always', 'Build Hands-On', 'Solve Creatively', 'Network It', 'Ship Real Projects']
