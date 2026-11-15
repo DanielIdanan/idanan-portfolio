@@ -499,6 +499,15 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .px{display:block;width:100%;height:100%;image-rendering:pixelated}
 /* resting pose, used as-is when reduced motion is on; the animations below override it */
 .px-fb,.px-armsB,.px-v2,.px-v3,.px-v4,.px-pop{opacity:0}
+.px-shade{opacity:.35}
+.px-node{opacity:.95;animation:px-node 6s steps(1) infinite backwards;animation-delay:calc(var(--i) * .15s)}
+@keyframes px-node{0%{opacity:0}8%,80%{opacity:1}92%,100%{opacity:0}}
+.px-s1{animation:px-s1 6s steps(1) infinite}.px-s2{animation:px-s2 6s steps(1) infinite}.px-s3{animation:px-s3 6s steps(1) infinite}
+@keyframes px-s1{0%,9%{opacity:0}10%,90%{opacity:1}91%,100%{opacity:0}}
+@keyframes px-s2{0%,24%{opacity:0}25%,75%{opacity:1}76%,100%{opacity:0}}
+@keyframes px-s3{0%,39%{opacity:0}40%,60%{opacity:1}61%,100%{opacity:0}}
+.px-tw{animation:px-tw 2.4s steps(1) infinite;animation-delay:calc(var(--i) * -.55s)}
+@keyframes px-tw{0%{opacity:1}45%{opacity:.2}60%{opacity:1}80%{opacity:.5}}
 .px-barrel{transform:translate(60px,38px)}
 .px-fall{transform:translate(32px,34px)}
 

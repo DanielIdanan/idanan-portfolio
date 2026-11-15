@@ -31,7 +31,7 @@ function Sprite({ rows, pal, x = 0, y = 0, cls, style }) {
   )
 }
 
-const Box = ({ x, y, w, h, f, cls, style }) => <rect x={x} y={y} width={w} height={h} fill={f} className={cls} style={style} />
+const Box = ({ x, y, w, h, f, cls, style, opacity }) => <rect x={x} y={y} width={w} height={h} fill={f} className={cls} style={style} opacity={opacity} />
 const transpose = (rows) => rows[0].split('').map((_, i) => rows.map((r) => r[i]).join(''))
 
 // 3x5 digit font
@@ -56,6 +56,23 @@ function Digits({ text, xr, y, s, color, cls }) {
   return <g className={cls}>{out}</g>
 }
 
+// Twinkling stars / fireflies: 1x1 dots that blink out of step (see .px-tw in index.css).
+function Stars({ pts, c = '#fef3c7' }) {
+  return <>{pts.map(([x, y], i) => <rect key={i} x={x} y={y} width="1" height="1" fill={i % 3 === 2 ? '#93c5fd' : c} className="px-tw" style={{ '--i': i }} />)}</>
+}
+// Soft top-left light and bottom-right shade on a block, so flat rects read as chunky 3D pixels.
+const Bevel = ({ x, y, w, h }) => (
+  <>
+    <rect x={x} y={y} width={w} height="1" fill="#ffffff" opacity=".22" />
+    <rect x={x} y={y + h - 1} width={w} height="1" fill="#000000" opacity=".28" />
+  </>
+)
+function Ladder({ x, y0, y1 }) {
+  const out = [<rect key="l" x={x} y={y0} width="1" height={y1 - y0} fill="#22d3ee" />, <rect key="r" x={x + 5} y={y0} width="1" height={y1 - y0} fill="#0891b2" />]
+  for (let y = y0 + 2; y < y1; y += 3) out.push(<rect key={y} x={x + 1} y={y} width="4" height="1" fill="#67e8f9" />)
+  return <>{out}</>
+}
+
 // Stepped steel girder: a row of 4-wide blocks whose top edge follows y = y0 + (x - x0) * slope.
 function Girder({ x0, x1, y0, slope }) {
   const out = []
@@ -75,17 +92,17 @@ function Girder({ x0, x1, y0, slope }) {
 
 /* ---------------- Donkey Kong (DSA Edition): an original ape, barrels and a runner ---------------- */
 const APE = [
-  '....BBBBBBBB....',
-  '...BBBBBBBBBB...',
-  '..BBBbbbbbbBBB..',
-  '..BBbSSSSSSbBB..',
+  '....HHHHHHHH....',
+  '...HHHHHHHHHH...',
+  '..hhhhhhhhhhhh..',
+  '..BBBBBBBBBBBB..',
+  '..BBGGGBBGGGBB..',
   '..BBSKSSSSKSBB..',
-  '..BBSSSSSSSSBB..',
   '...BSSSKKSSSB...',
   '....BSSSSSSB....',
   '..BBBBbbbbBBBB..',
-  '.BBBBbSSSSbBBBB.',
-  '.BBBBbSSSSbBBBB.',
+  '.BBBBbWWWWbBBBB.',
+  '.BBBBbWWWWbBBBB.',
   '.BBBBbbbbbbBBBB.',
   '.BBBBBBBBBBBBBB.',
   '..BBBBBBBBBBBB..',
@@ -94,7 +111,7 @@ const APE = [
   '.BBBBB....BBBBB.',
 ]
 const ARM = ['BBB', 'BBB', 'BbB', 'BBB', 'BBB', 'BBB', 'BBB', 'SSS']
-const APE_PAL = { B: '#6b4423', b: '#8d5f31', S: '#e3ad72', K: '#111111' }
+const APE_PAL = { B: '#4c4a6e', b: '#6d6a99', S: '#d9b99b', K: '#111111', H: '#facc15', h: '#ca8a04', G: '#7dd3fc', W: '#e7e2f0' }
 const BARREL_A = ['..OOOO..', '.OooooO.', 'OooooooO', 'OOOOOOOO', 'OOOOOOOO', 'OooooooO', '.OooooO.', '..OOOO..']
 const BARREL_PAL = { O: '#a85d1f', o: '#d28a3c' }
 const RUNNER = ['..HHHH..', '.HHHHHH.', '.SSSSSS.', '.SKSSKS.', '..SSSS..', '.TTTTTT.', 'STTTTTTS', 'SBBBBBBS', '.BBBBBB.']
@@ -102,11 +119,21 @@ const LEGS_A = ['.BB..BB.', '.BB..BB.', '.LL..LL.']
 const LEGS_B = ['..BBBB..', '..BBBB..', '..LLLL..']
 const RUN_PAL = { H: '#38bdf8', S: '#f0b98a', K: '#111111', T: '#facc15', B: '#2563eb', L: '#7c3f1d' }
 
+const DRUM = ['.BBBBBBBBBB.', 'BbbbbbbbbbbB', 'BBBBBBBBBBBB', 'BRRRRRRRRRRB', 'BRrrrrrrrrRB', 'BBBBBBBBBBBB', 'BBBBBBBBBBBB', 'BbbbbbbbbbbB', 'BBBBBBBBBBBB', 'BBBBBBBBBBBB', 'BbbbbbbbbbbB', '.BBBBBBBBBB.']
+const DRUM_PAL = { B: '#2563eb', b: '#60a5fa', R: '#dc2626', r: '#f87171' }
+
+// Path-finding route the runner "discovers" node by node (BFS-style), ending at the goal node.
+const ROUTE = [[62, 98], [56, 98], [50, 98], [46, 94], [46, 89], [46, 84], [46, 79], [54, 71], [62, 71], [70, 70], [78, 70], [86, 69], [94, 69], [102, 66], [102, 61], [102, 56], [102, 51], [102, 46], [108, 40], [116, 40]]
+const GOAL = [122, 41]
+
 function Kong() {
   return (
     <>
       <Box x="0" y="0" w="160" h="110" f="#12141f" />
+      <Stars pts={[[40, 8], [62, 14], [84, 6], [110, 16], [26, 9], [96, 26], [148, 22], [120, 28], [52, 26], [72, 30]]} />
       <Digits text="004200" xr={154} y={5} s={1} color="#e5e7eb" />
+      <Ladder x={100} y0={44} y1={72} />
+      <Ladder x={44} y0={75} y1={100} />
       <Girder x0={0} x1={132} y0={36} slope={1 / 16} />
       <Girder x0={28} x1={160} y0={76} slope={-1 / 16} />
       <Girder x0={0} x1={160} y0={100} slope={0} />
@@ -125,6 +152,16 @@ function Kong() {
         <Sprite rows={BARREL_A} pal={BARREL_PAL} cls="px-fa" />
         <Sprite rows={transpose(BARREL_A)} pal={BARREL_PAL} cls="px-fb" />
       </g>
+      {/* path nodes light up one after another; a stack on the right pushes and pops barrels (LIFO) */}
+      {ROUTE.map(([x, y], i) => <Box key={i} x={x} y={y} w="2" h="2" f="#a3e635" cls="px-node" style={{ '--i': i }} />)}
+      <Box x={GOAL[0]} y={GOAL[1]} w="4" h="4" f="#fde047" cls="px-node" style={{ '--i': ROUTE.length }} />
+      <Box x="141" y="80" w="1" h="19" f="#67e8f9" /><Box x="156" y="80" w="1" h="19" f="#67e8f9" /><Box x="141" y="98" w="16" h="1" f="#67e8f9" />
+      {[[93, 's1'], [88, 's2'], [83, 's3']].map(([y, c]) => (
+        <g key={c} className={`px-stk px-${c}`}>
+          <Box x="143" y={y} w="12" h="4" f="#a85d1f" /><Box x="143" y={y} w="12" h="1" f="#d28a3c" />
+        </g>
+      ))}
+      <Sprite rows={DRUM} pal={DRUM_PAL} x={2} y={88} />
       <g className="px-hop">
         <Sprite rows={RUNNER} pal={RUN_PAL} x={64} y={88} />
         <Sprite rows={LEGS_A} pal={RUN_PAL} x={64} y={97} cls="px-fa" />
@@ -142,6 +179,8 @@ const HOUSE = [
 const HOUSE_PAL = { R: '#e8503a', W: '#f3e9d2', D: '#7a4a2a', K: '#5ab0e8', B: '#6b6b5a' }
 const PIN = ['..RRR..', '.RRRRR.', 'RRRWRRR', 'RRRWRRR', 'RRRRRRR', '.RRRRR.', '.RRRRR.', '..RRR..', '..RRR..', '...R...']
 const CHECK = ['.........GG', '........GG.', '.......GG..', 'GG....GG...', '.GG..GG....', '..GGGG.....', '...GG......']
+const TREE = ['..GGG..', '.GGgGG.', 'GGGGgGG', '.GGGGG.', '..GGG..', '...T...', '...T...']
+const TREE_PAL = { G: '#14532d', g: '#4ade80', T: '#7a4a2a' }
 const TILES = ['#2f7d62', '#3a9475', '#c8b46e', '#2a6f5a']
 
 function Assess() {
@@ -154,15 +193,20 @@ function Assess() {
       <Box x="0" y="0" w="160" h="110" f="#0b2b2e" />
       <Box x="9" y="17" w="74" h="74" f="#0a1c1e" />
       {tiles}
+      {tiles.map((t) => <Bevel key={t.key} x={t.props.x} y={t.props.y} w={16} h={16} />)}
+      {[[0, 0], [3, 1], [1, 2], [3, 3]].map(([i, j]) => <Sprite key={`t${i}${j}`} rows={TREE} pal={TREE_PAL} x={11 + i * 18 + 4} y={19 + j * 18 + 3} />)}
       <g className="px-sel" fill="#ffffff">
         <Box x="47" y="37" w="16" h="1" /><Box x="47" y="52" w="16" h="1" /><Box x="47" y="37" w="1" h="16" /><Box x="62" y="37" w="1" h="16" />
       </g>
       <Sprite rows={HOUSE} pal={HOUSE_PAL} x={49} y={40} />
       <Sprite rows={PIN} pal={{ R: '#ef4444', W: '#fff' }} x={51} y={24} cls="px-bob" />
       {/* the form */}
+      <Box x="95" y="15" w="58" h="84" f="#000000" cls="px-shade" />
       <Box x="93" y="13" w="58" h="84" f="#0a1c1e" />
       <Box x="94" y="14" w="56" h="82" f="#f4f1e8" />
       <Box x="98" y="18" w="48" h="6" f="#1f9d8a" />
+      <Box x="100" y="20" w="18" h="2" f="#d1fae5" />
+      <Box x="140" y="19" w="4" h="4" f="#fde68a" />
       <Box x="98" y="30" w="44" h="3" f="#9aa5a3" cls="px-line px-l1" />
       <Box x="98" y="39" w="36" h="3" f="#9aa5a3" cls="px-line px-l2" />
       <Box x="98" y="48" w="44" h="3" f="#9aa5a3" cls="px-line px-l3" />
@@ -207,6 +251,8 @@ function binBody(sym) {
   SYMS[sym].forEach((line, ry) => line.split('').forEach((v, rx) => { if (v === '1') rows[6 + ry][9 + rx] = 'W' }))
   return rows.map((r) => r.join(''))
 }
+const PINE = ['....P....', '...PPP...', '..PPPPP..', '...PPP...', '..PPPPP..', '.PPPPPPP.', '..PPPPP..', '.PPPPPPP.', 'PPPPPPPPP', '....T....', '....T....', '....T....']
+const PINE_PAL = { P: '#166534', T: '#78350f' }
 const LID = ['..LLLLLLLLLLLLLLLLLLLL..', '.LLLLLLLLLLLLLLLLLLLLLL.', 'LLLLLLLLLLLLLLLLLLLLLLLL']
 const BOTTLE = ['..CC..', '..CC..', '.BBBB.', 'BBBBBB', 'BhBBBB', 'BhBBBB', 'BBBBBB', 'BBBBBB', 'BBBBBB', 'BBBBBB', 'BBBBBB', '.BBBB.']
 
@@ -214,7 +260,16 @@ function Eco() {
   return (
     <>
       <Box x="0" y="0" w="160" h="110" f="#0e1a10" />
+      <Stars c="#bbf7d0" pts={[[10, 10], [60, 6], [100, 18], [130, 12], [148, 28], [78, 36], [20, 44]]} />
+      {Array.from({ length: 20 }, (_, k) => {
+        const h = 10 + Math.round(5 * Math.sin(k * 0.9) + 3 * Math.sin(k * 0.37))
+        return <Box key={k} x={k * 8} y={101 - h} w="8" h={h} f="#132a18" />
+      })}
+      <Sprite rows={PINE} pal={PINE_PAL} x={6} y={89} />
+      <Sprite rows={PINE} pal={PINE_PAL} x={141} y={89} />
+      <Sprite rows={PINE} pal={PINE_PAL} x={150} y={93} />
       <Box x="0" y="101" w="160" h="9" f="#1b2b1d" />
+      <Box x="0" y="101" w="160" h="1" f="#2f6b3a" />
       {BINS.map((b, i) => (
         <g key={b.s}>
           <Sprite rows={binBody(b.s)} pal={{ C: b.C, c: b.c, W: '#ffffff' }} x={23 + i * 30} y={78} />
@@ -254,13 +309,24 @@ function Cal() {
   return (
     <>
       <Box x="0" y="0" w="160" h="110" f="#0d1120" />
+      {Array.from({ length: 16 * 11 }, (_, k) => {
+        const x = 5 + (k % 16) * 10, y = 5 + Math.floor(k / 16) * 10
+        return x > 50 && x < 110 ? null : <rect key={k} x={x} y={y} width="1" height="1" fill="#1d2547" />
+      })}
       <Box x="55" y="9" w="50" h="92" f="#070a14" />
       <Box x="56" y="10" w="48" h="90" f="#2a3350" />
+      <Box x="56" y="10" w="48" h="1" f="#4a5a85" />
+      <Box x="56" y="10" w="1" h="90" f="#3a4670" />
+      <Box x="70" y="11" w="20" h="2" f="#1d2a52" />
+      <Box x="74" y="11" w="1" h="2" f="#33478a" /><Box x="80" y="11" w="1" h="2" f="#33478a" /><Box x="86" y="11" w="1" h="2" f="#33478a" />
       <Box x="60" y="14" w="40" h="24" f="#07140a" />
       <Box x="61" y="15" w="38" h="22" f="#a5d6a7" />
       {VALUES.map((v, i) => <Digits key={v} text={v} xr={96} y={21} s={2} color="#1b3a1f" cls={`px-v px-v${i + 1}`} />)}
       {keys}
+      {keys.map((k) => <Bevel key={'b' + k.key} x={k.props.x} y={k.props.y} w={8} h={8} />)}
       <Box x="61" y="44" w="8" h="8" f="#ffffff" cls="px-press" />
+      <Box x="62" y="16" w="10" h="1" f="#ffffff" opacity=".35" />
+      <Box x="62" y="17" w="5" h="1" f="#ffffff" opacity=".35" />
       {floats.map(([g, x, col, i]) => (
         <Sprite key={g} rows={GLYPHS[g]} pal={{ 1: col }} x={x} y={80} cls="px-float" style={{ '--i': i }} />
       ))}
@@ -275,6 +341,10 @@ export default memo(function PixelArt({ id, label }) {
   return (
     <svg className="px" viewBox="0 0 160 110" shapeRendering="crispEdges" role="img" aria-label={label}>
       <Scene />
+      <defs>
+        <pattern id={`px-sl-${id}`} width="160" height="2" patternUnits="userSpaceOnUse"><rect width="160" height="1" fill="#000" opacity=".09" /></pattern>
+      </defs>
+      <rect width="160" height="110" fill={`url(#px-sl-${id})`} pointerEvents="none" />
     </svg>
   )
 })
