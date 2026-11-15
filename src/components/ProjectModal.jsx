@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react'
-import ProjectShot from './ProjectShot.jsx'
 import { Ctx } from '../lib/ctx.js'
 
 // Opens a clicked project in a big view. The Demo button only exists here; it opens the live site when a project has a `url`, otherwise it is a placeholder.
@@ -20,7 +19,6 @@ export default function ProjectModal({ project, onClose }) {
     <div className="pm" role="dialog" aria-modal="true" aria-label={project.title} onClick={onClose} data-lenis-prevent>
       <div className="pm-card" onClick={(e) => e.stopPropagation()}>
         <button className="pm-x" onClick={onClose} aria-label="Close project" autoFocus>✕</button>
-        <div className="pm-img"><ProjectShot project={project} big /></div>
         <div className="pm-body">
           <p className="lab">{project.category}</p>
           <h3>{project.title}</h3>

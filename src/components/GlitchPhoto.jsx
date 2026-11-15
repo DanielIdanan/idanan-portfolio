@@ -12,10 +12,8 @@ const shots = [
 ]
 const W = 900, H = 1200
 const HOLD = 2800 // ms each photo stays
-const GLITCH = 650 // ms the slice transition takes
-const STEP = 70 // ms between re-shuffles while glitching
-
-const rnd = (a, b) => a + Math.random() * (b - a)
+const GLITCH = 800 // ms the pixelate transition takes
+const STEP = 60 // ms between block-size steps, so it ticks like a retro game
 
 // Draws image `im` covering the canvas, optionally shifted sideways and brightened.
 function cover(g, im, x, y, w, h, dx = 0, bright = 1) {
@@ -26,34 +24,25 @@ function cover(g, im, x, y, w, h, dx = 0, bright = 1) {
   g.drawImage(im, sx, sy, sw, sh, x + dx, y, w, h)
 }
 
-// One frame of the glitch: horizontal bands cut into blocks, each block showing the old or the new photo.
-// `p` goes 0 -> 1; the share of blocks that already show the new photo grows with it.
-function glitchFrame(g, from, to, p) {
+// One frame of the pixelate: the old photo breaks into bigger and bigger blocks, then the new one
+// resolves from big blocks back to sharp. `p` goes 0 -> 1; the swap happens at 0.5, at the coarsest size.
+const SIZES = [1, 6, 14, 28, 48, 80]
+function pixelFrame(g, from, to, p) {
+  const q = p < 0.5 ? p * 2 : (1 - p) * 2
+  const b = SIZES[Math.round(q * (SIZES.length - 1))]
   g.filter = 'none'
-  cover(g, from, 0, 0, W, H)
-  let y = 0
-  while (y < H) {
-    const h = Math.round(rnd(H * 0.02, H * 0.12))
-    let x = 0
-    while (x < W) {
-      const w = Math.round(rnd(W * 0.22, W * 0.7))
-      const useNew = Math.random() < p
-      const wild = Math.random() < 0.28
-      if (useNew || wild) {
-        g.save()
-        g.beginPath(); g.rect(x, y, Math.min(w, W - x), h); g.clip()
-        const src = useNew ? to : from
-        cover(g, src, 0, 0, W, H, wild ? rnd(-W * 0.12, W * 0.12) : 0, wild ? (Math.random() < 0.5 ? 0.35 : 1.9) : 1)
-        g.restore()
-      }
-      x += w
-    }
-    y += h
-  }
-  g.filter = 'none'
+  g.imageSmoothingEnabled = true
+  cover(g, p < 0.5 ? from : to, 0, 0, W, H)
+  if (b === 1) return
+  const w = Math.ceil(W / b), h = Math.ceil(H / b)
+  const c = g.canvas
+  g.drawImage(c, 0, 0, W, H, 0, 0, w, h)
+  g.imageSmoothingEnabled = false
+  g.drawImage(c, 0, 0, w, h, 0, 0, w * b, h * b)
+  g.imageSmoothingEnabled = true
 }
 
-// Photos hold still, then break into sliced blocks and re-form as the next one. Click or tap skips ahead.
+// Photos hold still, then pixelate out and resolve into the next one. Click or tap skips ahead.
 export default function GlitchPhoto() {
   const cv = useRef(null)
   const imgs = useRef([])
@@ -87,7 +76,7 @@ export default function GlitchPhoto() {
     const tick = (t) => {
       const e = t - t0
       if (e >= GLITCH) { paint(to); busy.current = false; return }
-      if (e - last >= STEP) { last = e; glitchFrame(g, imgs.current[from], imgs.current[to], Math.min(1, (e / GLITCH) ** 1.3 + 0.05)) }
+      if (e - last >= STEP) { last = e; pixelFrame(g, imgs.current[from], imgs.current[to], e / GLITCH) }
       raf.current = requestAnimationFrame(tick)
     }
     raf.current = requestAnimationFrame(tick)

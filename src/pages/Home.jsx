@@ -62,7 +62,6 @@ export default function Home() {
         <h1 className="hname" aria-label="Daniel" ref={nameRef}>
           <SplitGsap text="daniel" at={3.05} /><span className="stop">.</span>
         </h1>
-        <Reveal className="hindex" at={3550} aria-hidden="true">01</Reveal>
 
         <div className="hintro">
           <Reveal as="span" className="hlabel" y={12} t=".52s" at={3350}>/ Hello</Reveal>
@@ -84,10 +83,9 @@ export default function Home() {
       <section className="pad">
         <Split className="d h2" style={{ marginTop: '1.5rem' }} text="Things I've built." />
         <ul className="rows">
-          {projects.map((p, i) => (
+          {projects.map((p) => (
             <li key={p.title} className="row">
               <a href={url('/projects')} onClick={to('/projects')}>
-                <span className="lab">0{i + 1}</span>
                 <h3>{p.title}</h3>
                 <p>{p.description}</p>
                 <span className="ar">↗</span>

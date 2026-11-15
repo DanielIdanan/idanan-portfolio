@@ -46,8 +46,11 @@ export default function Dock() {
         </ul>
       </nav>
       <button className="dock-fab" aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg className="ic-a" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
           <circle cx="8" cy="8" r="2.4" /><circle cx="16" cy="8" r="2.4" /><circle cx="8" cy="16" r="2.4" /><circle cx="16" cy="16" r="2.4" />
+        </svg>
+        <svg className="ic-b" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
         </svg>
       </button>
     </div>

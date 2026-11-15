@@ -32,7 +32,6 @@ function Row({ x, i, go }) {
   const n = useCount(x.level, go, i * 80 + 150)
   return (
     <div className="ed-r" style={{ '--i': i, '--w': x.level + '%' }}>
-      <span className="ed-ln" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
       <span className="ed-n">{x.name}</span>
       <span className="ed-t" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={x.level} aria-label={x.name + ' progress'}><b /></span>
       <span className="ed-p" aria-hidden="true">{n}<em>%</em></span>
@@ -123,9 +122,8 @@ export default function About() {
           <div>
             <div className="eb" style={{ marginBottom: '1.5rem' }}>OJT at the City Assessor's Office</div>
             <ul className="ojt">
-              {ojt.map(([title, text], i) => (
+              {ojt.map(([title, text]) => (
                 <Reveal as="li" className="pr" key={title} t=".56s">
-                  <span className="n">0{i + 1}</span>
                   <div><h3>{title}</h3><p>{text}</p></div>
                 </Reveal>
               ))}
