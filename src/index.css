@@ -355,10 +355,14 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .story .lead{color:var(--fg)}
 .story .lead+.lead{margin-top:1.25rem}
 
-/* projects: one case per row, pixel-art scene and text swap sides */
+/* projects: one case per row, screenshot and text swap sides */
 .pjs{margin-top:5rem;display:grid;gap:6rem}
 .pj{display:grid;gap:1.75rem}
-.pj-art{display:block;position:relative;width:100%;aspect-ratio:16/11;overflow:hidden;background:#101110;cursor:pointer}
+.pj-art{display:block;position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#101110;cursor:pointer}
+.pj-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .6s var(--ex)}
+.pj-art:hover img,.pj-art:focus-visible img{transform:scale(1.03)}
+.pj:last-child .pj-art{background:#000}
+.pj:last-child .pj-art img{object-fit:contain;object-position:center}
 .pj-art:focus-visible{outline-offset:4px}
 .pj-t h3{margin-top:1rem;font-family:var(--fs);font-weight:700;font-size:3rem;line-height:1;letter-spacing:-.045em}
 .pj-d{margin-top:1.25rem;max-width:40ch;color:var(--muted);font-size:1.125rem;line-height:1.6}
@@ -494,99 +498,3 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .l3-shadow{position:absolute;left:50%;bottom:2%;width:62%;height:9%;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(6px)}
 @media(max-width:1500px){.l3{top:22rem;width:min(32vw,620px)}}
 @media(max-width:900px){.l3{position:relative;right:auto;top:auto;width:min(78vw,380px);margin:3rem auto 0}}
-
-/* ===== pixel-art project scenes (PixelArt.jsx). steps() everywhere so motion ticks like a game. ===== */
-.px{display:block;width:100%;height:100%;image-rendering:pixelated}
-/* resting pose, used as-is when reduced motion is on; the animations below override it */
-.px-fb,.px-armsB,.px-v2,.px-v3,.px-v4,.px-pop{opacity:0}
-.px-shade{opacity:.35}
-.px-node{opacity:.95;animation:px-node 6s steps(1) infinite backwards;animation-delay:calc(var(--i) * .15s)}
-@keyframes px-node{0%{opacity:0}8%,80%{opacity:1}92%,100%{opacity:0}}
-.px-s1{animation:px-s1 6s steps(1) infinite}.px-s2{animation:px-s2 6s steps(1) infinite}.px-s3{animation:px-s3 6s steps(1) infinite}
-@keyframes px-s1{0%,9%{opacity:0}10%,90%{opacity:1}91%,100%{opacity:0}}
-@keyframes px-s2{0%,24%{opacity:0}25%,75%{opacity:1}76%,100%{opacity:0}}
-@keyframes px-s3{0%,39%{opacity:0}40%,60%{opacity:1}61%,100%{opacity:0}}
-.px-tw{animation:px-tw 2.4s steps(1) infinite;animation-delay:calc(var(--i) * -.55s)}
-@keyframes px-tw{0%{opacity:1}45%{opacity:.2}60%{opacity:1}80%{opacity:.5}}
-.px-barrel{transform:translate(60px,38px)}
-.px-fall{transform:translate(32px,34px)}
-
-/* Donkey Kong scene */
-.px-armsA{animation:px-flipA 1s steps(1) infinite}
-.px-armsB{animation:px-flipB 1s steps(1) infinite}
-.px-fa{animation:px-flipA .3s steps(1) infinite}
-.px-fb{animation:px-flipB .3s steps(1) infinite}
-.px-barrel{animation:px-barrel 6s steps(16) infinite}
-.px-hop{animation:px-hop 3s steps(1) infinite}
-@keyframes px-flipA{0%{opacity:1}50%{opacity:0}}
-@keyframes px-flipB{0%{opacity:0}50%{opacity:1}}
-@keyframes px-barrel{
-0%{transform:translate(28px,30px);opacity:0}
-1%{opacity:1}
-38%{transform:translate(124px,36px)}
-42%{transform:translate(132px,37px)}
-50%{transform:translate(138px,61px)}
-86%{transform:translate(34px,67px)}
-90%{transform:translate(26px,70px)}
-96%{transform:translate(18px,92px)}
-100%{transform:translate(4px,92px);opacity:1}}
-@keyframes px-hop{0%,60%{transform:none}64%{transform:translateY(-3px)}70%,76%{transform:translateY(-7px)}82%{transform:translateY(-3px)}88%,100%{transform:none}}
-
-/* AssessCore scene */
-.px-bob{animation:px-bob .8s steps(1) infinite}
-@keyframes px-bob{0%{transform:none}50%{transform:translateY(-3px)}}
-.px-sel{animation:px-blink 1.2s steps(1) infinite}
-@keyframes px-blink{0%{opacity:1}50%{opacity:0}}
-.px-line{transform-box:fill-box;transform-origin:0 50%}
-.px-l1{animation:px-l1 6s steps(8) infinite}
-.px-l2{animation:px-l2 6s steps(8) infinite}
-.px-l3{animation:px-l3 6s steps(8) infinite}
-.px-l4{animation:px-l4 6s steps(8) infinite}
-@keyframes px-l1{0%,5%{transform:scaleX(0)}15%,90%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
-@keyframes px-l2{0%,15%{transform:scaleX(0)}25%,90%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
-@keyframes px-l3{0%,25%{transform:scaleX(0)}35%,90%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
-@keyframes px-l4{0%,35%{transform:scaleX(0)}45%,90%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
-.px-stamp{animation:px-stamp 6s steps(1) infinite}
-@keyframes px-stamp{0%,56%{opacity:0;transform:translateY(-6px)}60%{opacity:1;transform:translateY(-2px)}64%,90%{opacity:1;transform:none}96%,100%{opacity:0}}
-
-/* EcoSort scene */
-.px-fall{animation:px-fall 5s steps(14) infinite}
-@keyframes px-fall{
-0%{transform:translate(32px,-16px);opacity:1}
-22%{transform:translate(32px,22px)}
-42%{transform:translate(32px,26px)}
-58%{transform:translate(32px,63px)}
-59%,100%{transform:translate(32px,63px);opacity:0}}
-.px-scan{animation:px-scan 5s steps(1) infinite}
-@keyframes px-scan{0%{opacity:0}18%,28%{opacity:1}30%{opacity:0}34%,40%{opacity:1}44%,100%{opacity:0}}
-.px-lid{animation:px-lid 5s steps(1) infinite}
-@keyframes px-lid{0%,52%{transform:none}54%,66%{transform:translateY(-5px)}68%,100%{transform:none}}
-.px-pop{animation:px-pop 5s steps(1) infinite}
-@keyframes px-pop{0%,60%{opacity:0;transform:none}62%,82%{opacity:1;transform:translateY(-3px)}86%,100%{opacity:0}}
-
-/* Sci-Cal scene */
-.px-v1{opacity:1}
-.px-v{animation-duration:8s;animation-timing-function:steps(1);animation-iteration-count:infinite}
-.px-v1{animation-name:px-v1}.px-v2{animation-name:px-v2}.px-v3{animation-name:px-v3}.px-v4{animation-name:px-v4}
-@keyframes px-v1{0%,24%{opacity:1}25%,100%{opacity:0}}
-@keyframes px-v2{0%,24%{opacity:0}25%,49%{opacity:1}50%,100%{opacity:0}}
-@keyframes px-v3{0%,49%{opacity:0}50%,74%{opacity:1}75%,100%{opacity:0}}
-@keyframes px-v4{0%,74%{opacity:0}75%,99%{opacity:1}100%{opacity:0}}
-.px-press{opacity:.45;animation:px-press 8s steps(1) infinite}
-@keyframes px-press{
-0%{transform:translate(0,0)}
-12%{transform:translate(10px,20px)}
-24%{transform:translate(30px,10px)}
-25%{transform:translate(20px,30px)}
-37%{transform:translate(0,40px)}
-49%{transform:translate(30px,30px)}
-50%{transform:translate(10px,10px)}
-62%{transform:translate(20px,20px)}
-74%{transform:translate(30px,40px)}
-75%{transform:translate(0,30px)}
-87%{transform:translate(20px,0)}
-99%{transform:translate(30px,20px)}}
-.px-float{animation:px-float 4s steps(10) infinite;animation-delay:calc(var(--i) * -1s)}
-@keyframes px-float{0%{transform:translateY(0);opacity:0}15%{opacity:1}80%{opacity:1}100%{transform:translateY(-58px);opacity:0}}
-
-@media(prefers-reduced-motion:reduce){.px *{animation:none!important}}
