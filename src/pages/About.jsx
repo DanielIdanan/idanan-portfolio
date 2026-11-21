@@ -1,55 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import Split from '../components/Split.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { bio, ojt } from '../data/about.js'
-import { skillGroups, aiTools } from '../data/skills.js'
+import { skillGroups, aiTools, stageOf } from '../data/skills.js'
 import { useOn } from '../lib/useOn.js'
 import AiIcon from '../components/AiIcon.jsx'
 import GlitchPhoto from '../components/GlitchPhoto.jsx'
 
-const still = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-// Counts 0 -> `to` once `go` is true (instantly when motion is reduced).
-function useCount(to, go, delay = 0) {
-  const [v, setV] = useState(0)
-  const calm = go && still()
-  useEffect(() => {
-    if (!go || calm) return
-    let raf, t0
-    const step = (t) => {
-      if (t0 == null) t0 = t
-      const p = Math.min((t - t0) / 900, 1)
-      setV(Math.round(to * (1 - Math.pow(1 - p, 4))))
-      if (p < 1) raf = requestAnimationFrame(step)
-    }
-    const id = setTimeout(() => { raf = requestAnimationFrame(step) }, delay)
-    return () => { clearTimeout(id); cancelAnimationFrame(raf) }
-  }, [to, go, calm, delay])
-  return calm ? to : go ? v : 0
-}
-
-function Row({ x, i, go }) {
-  const n = useCount(x.level, go, i * 80 + 150)
+function Row({ x, i }) {
+  const stage = stageOf(x.level)
   return (
     <div className="ed-r" style={{ '--i': i, '--w': x.level + '%' }}>
       <span className="ed-n">{x.name}</span>
-      <span className="ed-t" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={x.level} aria-label={x.name + ' progress'}><b /></span>
-      <span className="ed-p" aria-hidden="true">{n}<em>%</em></span>
-      <span className="ed-s">{x.stage}</span>
+      <span className="ed-t" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={x.level} aria-valuetext={stage} aria-label={x.name}><b /></span>
+      <span className="ed-s">{stage}</span>
     </div>
   )
-}
-
-function Avg({ value, go }) {
-  const n = useCount(value, go)
-  return <p className="ed-avg" aria-label={'Average ' + value + ' percent'}><span aria-hidden="true">{n}<em>%</em></span><small>avg</small></p>
 }
 
 function Skills() {
   const [active, setActive] = useState(0)
   const [ref, on] = useOn()
+  const tabs = useRef([])
   const g = skillGroups[active]
-  const avg = Math.round(g.items.reduce((t, x) => t + x.level, 0) / g.items.length)
+  // Arrow keys, Home and End move between tabs (roving tabindex); nothing changes until a tab is chosen.
+  const onKey = (e) => {
+    const n = skillGroups.length
+    const next = { ArrowRight: (active + 1) % n, ArrowLeft: (active - 1 + n) % n, Home: 0, End: n - 1 }[e.key]
+    if (next == null) return
+    e.preventDefault()
+    setActive(next)
+    tabs.current[next]?.focus()
+  }
   return (
     <section className="px-(--gutter) py-(--section)">
       <Split className="font-sans font-bold normal-case tracking-[-.05em] leading-none text-balance text-[clamp(3.5rem,12vw,9rem)]" text="Skills & tools." />
@@ -58,28 +40,30 @@ function Skills() {
         <div ref={ref} className={'fu ed' + (on ? ' on' : '')} style={{ '--d': '0ms', '--sc': '1.04', '--t': '.64s' }}>
           <div className="ed-bar">
             <span className="ed-dots" aria-hidden="true"><i /><i /><i /></span>
-            <div className="ed-tabs" role="tablist" aria-label="Skill groups">
+            <div className="ed-tabs" role="tablist" aria-label="Skill groups" onKeyDown={onKey}>
               {skillGroups.map((s, i) => (
                 <button
                   key={s.file}
+                  ref={(el) => { tabs.current[i] = el }}
                   role="tab"
+                  id={'tab-' + s.file}
                   aria-selected={i === active}
+                  aria-controls="skills-panel"
+                  tabIndex={i === active ? 0 : -1}
                   className={'ed-tab' + (i === active ? ' a' : '')}
                   onClick={() => setActive(i)}
-                  onMouseEnter={() => setActive(i)}
-                  onFocus={() => setActive(i)}
                 >
                   {s.file}
                 </button>
               ))}
             </div>
           </div>
-          <div className="ed-body" role="tabpanel" key={active}>
+          <div className="ed-body" role="tabpanel" id="skills-panel" aria-labelledby={'tab-' + g.file} key={active}>
             <div className="ed-hd">
               <p className="ed-c">{'// ' + g.label}</p>
-              <Avg value={avg} go={on} />
+              <p className="ed-avg"><span>{g.items.length}</span><small>{g.items.length === 1 ? 'skill' : 'skills'}</small></p>
             </div>
-            {g.items.map((x, i) => <Row key={x.name} x={x} i={i} go={on} />)}
+            {g.items.map((x, i) => <Row key={x.name} x={x} i={i} />)}
           </div>
           <div className="ed-foot">
             <span>{g.file}.js</span>

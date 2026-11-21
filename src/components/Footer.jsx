@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="relative px-(--gutter)">
       <div className="grid gap-7 border-t border-line py-8 lg:grid-cols-12 lg:gap-10 lg:py-12">
         <div className="lg:col-span-6">
-          <p className="sig d text-[2.75rem] leading-none sm:text-[3.25rem]">Daniel Idanan</p>
+          <p className="sig d text-[2.25rem] leading-none sm:text-[3rem]">Daniel Idanan</p>
           <p className="mt-4 text-[.8125rem] tracking-[.22em] text-muted uppercase">BSIT 3C, Gordon College, Olongapo City</p>
         </div>
         <nav className="soc lg:col-span-3" aria-label="Contact">

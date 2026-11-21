@@ -23,9 +23,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
-      - name: SPA fallback for client-side routes
-        run: cp dist/index.html dist/404.html
+      - run: npm run build # vite build, then scripts/routes.mjs writes a real page per route + 404.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

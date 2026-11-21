@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useRef } from 'react'
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { Ctx } from '../lib/ctx.js'
 import { reduce } from '../lib/motion.js'
@@ -7,6 +7,7 @@ import { H_PATH } from './Logo.jsx'
 // A 3D version of the logo with no extra libraries: the flat mark is stacked as thin layers along Z
 // (an extrusion), tilted, then gently swayed and nudged by the mouse.
 const LAYERS = 40 // more = smoother sides, but more DOM
+const LAYERS_SMALL = 20 // phones and small tablets: half the layers, the sides still look solid
 const DEPTH = 64 // how thick the logo is, in px
 
 export default function Logo3D() {
@@ -14,6 +15,7 @@ export default function Logo3D() {
   const tilt = useRef(null)
   const sway = useRef(null)
   const { whenReady } = useContext(Ctx)
+  const [layers] = useState(() => (window.matchMedia('(max-width: 767px)').matches ? LAYERS_SMALL : LAYERS))
 
   // intro: fade + scale in once the page transition is done
   useLayoutEffect(() => {
@@ -27,7 +29,8 @@ export default function Logo3D() {
     return () => { cancel(); tw?.kill(); gsap.set(el, { clearProps: 'opacity,transform' }) }
   }, [whenReady])
 
-  // idle sway + mouse follow
+  // idle sway + mouse follow. Both only run while the logo is on screen, and the mouse follow
+  // is skipped on touch screens, where there is no pointer to follow.
   useEffect(() => {
     if (reduce) return
     const idle = gsap.to(sway.current, { rotateY: 14, rotateX: -5, duration: 3.6, ease: 'sine.inOut', yoyo: true, repeat: -1 })
@@ -40,8 +43,18 @@ export default function Logo3D() {
       ry(nx * 16)
       rx(-ny * 12)
     }
-    window.addEventListener('pointermove', move)
-    return () => { window.removeEventListener('pointermove', move); idle.kill() }
+    const hasPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        idle.play()
+        if (hasPointer) window.addEventListener('pointermove', move)
+      } else {
+        idle.pause()
+        window.removeEventListener('pointermove', move)
+      }
+    })
+    io.observe(wrap.current)
+    return () => { io.disconnect(); window.removeEventListener('pointermove', move); idle.kill() }
   }, [])
 
   return (
@@ -50,8 +63,8 @@ export default function Logo3D() {
       <div className="l3-tilt" ref={tilt}>
         <div className="l3-sway" ref={sway}>
           <div className="l3-stage">
-            {Array.from({ length: LAYERS }, (_, i) => {
-              const t = i / (LAYERS - 1) // 0 = back, 1 = front
+            {Array.from({ length: layers }, (_, i) => {
+              const t = i / (layers - 1) // 0 = back, 1 = front
               const z = (t - 0.5) * DEPTH
               const p = Math.round(34 + 66 * t * t) // sides are darker, the front face is full colour
               return (
@@ -63,7 +76,7 @@ export default function Logo3D() {
                   style={{ transform: `translate(-50%,-50%) translateZ(${z}px)` }}
                 >
                   <path d={H_PATH} style={{ fill: `color-mix(in srgb, var(--fg) ${p}%, var(--bg))` }} />
-                  <circle cx="176" cy="48" r="24" style={{ fill: `color-mix(in srgb, var(--pop, #ff4b1f) ${p}%, #000)` }} />
+                  <circle cx="176" cy="48" r="24" style={{ fill: `color-mix(in srgb, var(--pop, #ff4b1f) ${p}%, #0b0b0b)` }} />
                 </svg>
               )
             })}

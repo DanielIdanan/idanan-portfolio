@@ -10,6 +10,7 @@ const shots = [
   { src: a3, alt: 'Daniel in shades, resting his chin on his hand' },
   { src: a4, alt: 'Daniel on his phone in an armchair' },
 ]
+const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const W = 900, H = 1200
 const HOLD = 2800 // ms each photo stays
 const GLITCH = 800 // ms the pixelate transition takes
@@ -42,7 +43,8 @@ function pixelFrame(g, from, to, p) {
   g.imageSmoothingEnabled = true
 }
 
-// Photos hold still, then pixelate out and resolve into the next one. Click or tap skips ahead.
+// Photos hold still, then pixelate out and resolve into the next one. Click or tap skips ahead; the Pause
+// button stops the slideshow for good (WCAG 2.2.2: anything that moves by itself needs a way to stop).
 export default function GlitchPhoto() {
   const cv = useRef(null)
   const imgs = useRef([])
@@ -52,6 +54,9 @@ export default function GlitchPhoto() {
   const raf = useRef(0)
   const [i, setI] = useState(0)
   const [ready, setReady] = useState(false)
+  const held = useRef(false) // the visitor pressed Pause: stays paused, whatever hover or focus does
+  const [paused, setPaused] = useState(false)
+  const [auto] = useState(() => !calm()) // no slideshow at all when motion is reduced
 
   const paint = useCallback((n) => {
     const c = cv.current
@@ -60,8 +65,6 @@ export default function GlitchPhoto() {
     g.filter = 'none'
     cover(g, imgs.current[n], 0, 0, W, H)
   }, [])
-
-  const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const go = useCallback((to) => {
     if (busy.current || to === cur.current) return
@@ -84,7 +87,7 @@ export default function GlitchPhoto() {
 
   const start = useCallback(() => {
     clearInterval(timer.current)
-    if (calm()) return
+    if (calm() || held.current) return
     timer.current = setInterval(() => go((cur.current + 1) % shots.length), HOLD + GLITCH)
   }, [go])
 
@@ -103,10 +106,25 @@ export default function GlitchPhoto() {
 
   const next = () => { go((cur.current + 1) % shots.length); start() }
   const pause = () => clearInterval(timer.current)
+  const toggle = () => {
+    held.current = !held.current
+    setPaused(held.current)
+    if (held.current) pause(); else start()
+  }
 
   return (
-    <button type="button" className="gp" onClick={next} onMouseEnter={pause} onMouseLeave={start} onFocus={pause} onBlur={start} aria-label="Next photo">
-      <canvas ref={cv} width={W} height={H} role="img" aria-label={shots[i].alt} />
-    </button>
+    <div>
+      <button type="button" className="gp" onClick={next} onMouseEnter={pause} onMouseLeave={start} onFocus={pause} onBlur={start} aria-label="Next photo">
+        <canvas ref={cv} width={W} height={H} role="img" aria-label={shots[i].alt} />
+      </button>
+      <div className="mt-3 flex items-center justify-between">
+        <span className="lab" aria-hidden="true">{String(i + 1).padStart(2, '0')} / {String(shots.length).padStart(2, '0')}</span>
+        {auto && (
+          <button type="button" className="lab min-h-11 px-1 hover:text-fg" onClick={toggle} aria-pressed={paused}>
+            {paused ? 'Play slideshow' : 'Pause slideshow'}
+          </button>
+        )}
+      </div>
+    </div>
   )
 }

@@ -23,6 +23,7 @@ export default function Dock() {
     return () => window.removeEventListener('keydown', key)
   }, [open])
 
+  const isOn = (to) => (to === '/' ? pathname === '/' : pathname.startsWith(to))
   const nav = (to) => (e) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey) return
     e.preventDefault()
@@ -37,7 +38,7 @@ export default function Dock() {
         <ul className="dock-list">
           {items.map((it, i) => (
             <li key={it.to} style={{ '--i': i, '--n': items.length - i }}>
-              <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + it.to} className={pathname === it.to ? 'on' : ''} aria-current={pathname === it.to ? 'page' : undefined} tabIndex={open ? 0 : -1} onClick={nav(it.to)}>
+              <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + it.to} className={isOn(it.to) ? 'on' : ''} aria-current={isOn(it.to) ? 'page' : undefined} tabIndex={open ? 0 : -1} onClick={nav(it.to)}>
                 <span className="dock-lab">{it.label}</span>
                 <span className="dock-ic">{it.icon}</span>
               </a>

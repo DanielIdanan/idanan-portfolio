@@ -9,7 +9,7 @@ import Typewriter from '../components/Typewriter.jsx'
 import Reveal from '../components/Reveal.jsx'
 import hero from '../assets/hero.webp'
 import { projects } from '../data/projects.js'
-import { reduce } from '../lib/motion.js'
+import { reduce, INTRO } from '../lib/motion.js'
 
 const roles = ['IT student', 'Developer', 'Hardware', 'Networking']
 gsap.registerPlugin(ScrollTrigger)
@@ -29,7 +29,7 @@ export default function Home() {
       gsap.set('.hport', { clipPath: 'inset(100% 0 0 0)' })
       gsap.set('.hport img', { scale: 1.35 })
       gsap.set('.hblock', { clipPath: 'inset(0 100% 0 0)' })
-      const tl = gsap.timeline({ delay: Math.max(0, 3.05 - performance.now() / 1000) })
+      const tl = gsap.timeline({ delay: Math.max(0, INTRO - performance.now() / 1000) })
       tl.to('.hport', { clipPath: 'inset(0% 0 0 0)', duration: 1.1, ease: 'power4.inOut' }, 0)
         .to('.hport img', { scale: 1, duration: 1.4, ease: 'power3.out' }, 0)
         .to('.hblock', { clipPath: 'inset(0 0% 0 0)', duration: 1.2, ease: 'power4.inOut' }, 0.15)
@@ -60,24 +60,24 @@ export default function Home() {
         <div className="hgrad absolute inset-x-0 bottom-0 z-20 hidden h-[24svh] bg-linear-to-b/oklab from-transparent to-bg lg:block" />
 
         <h1 className="hname pointer-events-none relative order-1 px-(--gutter) font-sans text-[clamp(4rem,26vw,12rem)] leading-[.95] font-bold tracking-[-.05em] text-fg lg:absolute lg:top-1/2 lg:left-(--gutter) lg:z-25 lg:-mt-[.5em] lg:p-0 lg:text-[clamp(4rem,14.5vw,15rem)] lg:leading-none" aria-label="Daniel" ref={nameRef}>
-          <SplitGsap text="daniel" at={3.05} /><span className="stop">.</span>
+          <SplitGsap text="daniel" at={INTRO} /><span className="stop">.</span>
         </h1>
 
         <div className="order-4 mx-(--gutter) mt-7 flex flex-col gap-4 lg:absolute lg:top-32 lg:left-(--gutter) lg:z-30 lg:m-0 lg:w-[min(24rem,40vw)] lg:gap-[.9rem]">
-          <Reveal as="span" className="text-xs font-bold tracking-[.1em] text-fg uppercase" y={12} t=".52s" at={3350}>/ Hello</Reveal>
-          <h2 className="roles d min-h-[1.1em] text-[2.25rem] leading-[1.05] text-fg"><Typewriter words={roles} at={3250} /></h2>
-          <Reveal as="p" className="text-[1.0625rem] leading-[1.6] text-muted lg:text-sm" y={16} t=".52s" at={3450}>
+          <Reveal as="span" className="text-xs font-bold tracking-[.1em] text-fg uppercase" y={12} t=".52s" at={INTRO * 1000 + 300}>/ Hello</Reveal>
+          <h2 className="roles d min-h-[1.1em] text-[2.25rem] leading-[1.05] text-fg"><Typewriter words={roles} at={INTRO * 1000 + 200} /></h2>
+          <Reveal as="p" className="text-[1.0625rem] leading-[1.6] text-muted lg:text-sm" y={16} t=".52s" at={INTRO * 1000 + 400}>
             Hi, I'm Daniel, a third-year IT student at Gordon College in Olongapo City. I like working with hardware and networks, and I build apps when I can. Have a look at what I've made below.
           </Reveal>
         </div>
 
-        <Reveal className="order-3 mx-(--gutter) flex justify-between gap-3 border-b border-line py-[.9rem] text-[.6875rem] font-bold tracking-[.12em] uppercase lg:absolute lg:top-32 lg:right-(--gutter) lg:z-30 lg:m-0 lg:justify-start lg:gap-4 lg:border-r-2 lg:border-b-0 lg:border-fg lg:p-0 lg:pr-3 lg:text-[.8125rem] lg:tracking-[.08em] lg:[writing-mode:vertical-rl]" y={0} t=".6s" at={3650}>
+        <Reveal className="order-3 mx-(--gutter) flex justify-between gap-3 border-b border-line py-[.9rem] text-[.6875rem] font-bold tracking-[.12em] uppercase lg:absolute lg:top-32 lg:right-(--gutter) lg:z-30 lg:m-0 lg:justify-start lg:gap-4 lg:border-r-2 lg:border-b-0 lg:border-fg lg:p-0 lg:pr-3 lg:text-[.8125rem] lg:tracking-[.08em] lg:[writing-mode:vertical-rl]" y={0} t=".6s" at={INTRO * 1000 + 600}>
           <span>Idanan, Daniel D.</span>
           <span>IT Student / Developer</span>
         </Reveal>
 
-        <a href={url('/projects')} onClick={to('/projects')} className="order-5 mx-(--gutter) mt-6 flex h-14 items-center justify-between bg-accent px-5 text-2xl leading-none text-bg transition-[transform,background-color,color] duration-250 ease-ex before:text-[.9375rem] before:font-semibold before:content-['View_projects'] hover:bg-pop hover:text-white lg:absolute lg:bottom-[10%] lg:left-[38%] lg:z-30 lg:m-0 lg:grid lg:size-14 lg:place-items-center lg:px-0 lg:before:content-none lg:hover:translate-x-[.4rem]" aria-label="View projects">→</a>
-        <Reveal className="hidden items-center gap-3 text-[.8125rem] tracking-[.22em] text-fg uppercase before:h-px before:w-10 before:bg-pop before:content-[''] lg:absolute lg:bottom-8 lg:left-[calc(38%+5rem)] lg:z-30 lg:flex" at={3950}>Scroll down</Reveal>
+        <a href={url('/projects')} onClick={to('/projects')} className="order-5 mx-(--gutter) mt-6 flex h-14 items-center justify-between bg-accent px-5 text-2xl leading-none text-bg transition-[transform,background-color,color] duration-250 ease-ex before:text-[.9375rem] before:font-semibold before:content-['View_projects'] hover:bg-pop hover:text-on-pop lg:absolute lg:bottom-[10%] lg:left-[38%] lg:z-30 lg:m-0 lg:grid lg:size-14 lg:place-items-center lg:px-0 lg:before:content-none lg:hover:translate-x-[.4rem]" aria-label="View projects">→</a>
+        <Reveal className="hidden items-center gap-3 text-[.8125rem] tracking-[.22em] text-fg uppercase before:h-px before:w-10 before:bg-pop before:content-[''] lg:absolute lg:bottom-8 lg:left-[calc(38%+5rem)] lg:z-30 lg:flex" at={INTRO * 1000 + 900}>Scroll down</Reveal>
       </section>
 
       <section className="px-(--gutter) py-(--section) lg:py-[calc(var(--section)*1.4)]">
@@ -86,13 +86,13 @@ export default function Home() {
           {projects.map((p) => (
             <li key={p.title} className="row border-b border-line">
               <a
-                href={url('/projects')}
-                onClick={to('/projects')}
+                href={url('/projects/' + p.slug)}
+                onClick={to('/projects/' + p.slug)}
                 className="group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-6 transition-[background-color,color,padding] duration-250 hover:bg-accent hover:text-bg lg:grid-cols-[1.2fr_2fr_auto] lg:gap-x-6 lg:gap-y-2 lg:px-2 lg:py-10 lg:hover:pl-5"
               >
                 <h3 className="col-start-1 row-start-1 text-2xl leading-[1.15] font-semibold tracking-[-.01em] lg:col-auto lg:row-auto lg:text-[1.75rem]">{p.title}</h3>
                 <p className="col-start-1 row-start-2 mt-2 text-muted group-hover:text-bg group-hover:opacity-70 lg:col-auto lg:row-auto lg:m-0 lg:max-w-[44ch]">{p.description}</p>
-                <span className="ar col-start-2 row-span-2 row-start-1 grid size-11 place-items-center bg-accent text-xl text-bg transition-[background-color,color] duration-250 group-hover:bg-pop group-hover:text-white lg:col-auto lg:row-auto lg:row-span-1" aria-hidden="true">↗</span>
+                <span className="ar col-start-2 row-span-2 row-start-1 grid size-11 place-items-center bg-accent text-xl text-bg transition-[background-color,color] duration-250 group-hover:bg-pop group-hover:text-on-pop lg:col-auto lg:row-auto lg:row-span-1" aria-hidden="true">↗</span>
               </a>
             </li>
           ))}

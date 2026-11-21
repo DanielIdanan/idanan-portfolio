@@ -17,7 +17,7 @@ export default function NotFound() {
   return (
     <section className="flex min-h-[70vh] flex-col items-start gap-6 px-(--gutter) pt-26 pb-(--section) md:pt-48">
       <Reveal as="p" className="lab">Error 404</Reveal>
-      <Split as="h1" className="d text-[clamp(3rem,11vw,9rem)] leading-[.95]" text="Page not found." />
+      <Split as="h1" className="d text-[clamp(2.75rem,10vw,8rem)] leading-none" text="Page not found." />
       <Reveal as="p" className="max-w-[44ch] text-[1.375rem] leading-[1.45] text-muted">
         There's nothing at <code className="font-[inherit] break-all text-fg">{pathname}</code>. The link may be broken, or the page may have moved.
       </Reveal>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { H_PATH } from './Logo.jsx'
+import { markIntroSeen } from '../lib/motion.js'
 
-// Timeline (ms). The CSS (.ld-* in index.css) draws the h and drops the dot for the first 2.3s. At 2300
+// Timeline (ms). The CSS (.ld-* in index.css) draws the h and drops the dot for the first 1.1s. At 1100
 // the dot hops in place (HOP ms per hop) until the page has finished loading, then it swells into an ink
-// flood that fades away to reveal the page.
-const HOP_START = 2300
+// flood that fades away to reveal the page. Plays once per session (see lib/motion.js).
+const HOP_START = 1100
 const HOP = 800
-const AFTER_GO = 1050 // flood + fade-out, matches .go rules in index.css
+const AFTER_GO = 700 // flood + fade-out, matches .go rules in index.css
 
 export default function Preloader({ onDone }) {
   const [gone, setGone] = useState(false)
@@ -19,7 +20,7 @@ export default function Preloader({ onDone }) {
     const tick = (n) => {
       if (document.readyState === 'complete') {
         setGo(true)
-        timers.push(setTimeout(() => { setGone(true); onDone() }, AFTER_GO))
+        timers.push(setTimeout(() => { markIntroSeen(); setGone(true); onDone() }, AFTER_GO))
       } else {
         at(HOP_START + (n + 1) * HOP, () => tick(n + 1))
       }

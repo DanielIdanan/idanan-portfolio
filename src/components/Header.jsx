@@ -29,7 +29,7 @@ export default function Header() {
         <div className="flex items-center gap-5 md:gap-7">
           <ul className="links hidden gap-10 md:flex">
             {links.map((l) => (
-              <li key={l.to}><NavLink to={l.to} end onClick={nav(l.to)}>{l.label}</NavLink></li>
+              <li key={l.to}><NavLink to={l.to} end={l.to === '/'} onClick={nav(l.to)}>{l.label}</NavLink></li>
             ))}
           </ul>
           <ThemeToggle />

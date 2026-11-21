@@ -6,12 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Daniel D. Idanan, a third-year BSIT student at Gordon College in Olongapo City. See the apps I've built." />
     <meta name="theme-color" content="#d9d9d9" />
+    <script>
+      // Apply the saved dark theme before first paint, so dark-mode visitors never see a light flash.
+      try {
+        if (localStorage.getItem('dark') === '1') {
+          document.documentElement.setAttribute('data-dark', '')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0b0b0b')
+        }
+      } catch (e) {}
+    </script>
+    <link rel="canonical" href="https://danielidanan.github.io/idanan-portfolio/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Daniel D. Idanan" />
+    <meta property="og:url" content="https://danielidanan.github.io/idanan-portfolio/" />
     <meta property="og:title" content="Daniel D. Idanan | IT Student & Developer" />
     <meta property="og:description" content="Daniel D. Idanan, a third-year BSIT student at Gordon College in Olongapo City. See the apps I've built." />
+    <meta property="og:image" content="https://danielidanan.github.io/idanan-portfolio/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Daniel D. Idanan, IT student and developer, next to the word daniel." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Daniel D. Idanan | IT Student & Developer" />
+    <meta name="twitter:description" content="Daniel D. Idanan, a third-year BSIT student at Gordon College in Olongapo City. See the apps I've built." />
+    <meta name="twitter:image" content="https://danielidanan.github.io/idanan-portfolio/og.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>Daniel D. Idanan | IT Student & Developer</title>
   </head>
   <body>

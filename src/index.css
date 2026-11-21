@@ -15,6 +15,7 @@
   --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
   --color-pop: var(--pop);
+  --color-on-pop: var(--on-pop);
   --color-block: var(--block);
   --font-display: var(--fd);
   --font-sans: var(--fs);
@@ -34,24 +35,19 @@ img,video{display:block;max-width:100%}ul{list-style:none}button,a{font:inherit;
 --bg:oklch(0.885 0 0);--fg:oklch(0.150 0 0);--surface:oklch(0.583 0 0);--surface-2:oklch(0.524 0 0);--muted:oklch(0.409 0 0);
 --line:rgba(11,11,11,.16);--line-strong:rgba(11,11,11,.34);--accent:#0b0b0b;
 --gutter:16px;--section:4.5rem;--ex:cubic-bezier(.16,1,.3,1);
---fd:"Anton",sans-serif;--fs:"Onest",sans-serif}
-html{font-size:clamp(15px,4.2vw,18px);background:var(--bg)}
-@media(min-width:640px){html{font-size:16px}:root{--gutter:2.5rem}}
+--fd:"Onest",sans-serif;--fs:"Onest",sans-serif}
+html{font-size:max(100%,.833333vw);background:var(--bg)} /* the browser's own size (16px by default); only grows on screens wider than 1920px */
+@media(min-width:640px){:root{--gutter:2.5rem}}
 @media(min-width:768px){:root{--section:9rem}}
-@media(min-width:1024px){html{font-size:max(14px,1.111111vw)}}
-@media(min-width:1441px){html{font-size:.833333vw}}
-@media(min-width:1921px){html{font-size:16px}}
 body{background:var(--bg);color:var(--fg);font-family:var(--fs);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 ::selection{background:var(--accent);color:var(--bg)}
 main{position:relative;width:100%;overflow-x:clip}
 section,footer{position:relative}
-.d{font-family:var(--fd);text-transform:uppercase;letter-spacing:-.01em;font-weight:400}
+.d{font-family:var(--fd);letter-spacing:-.05em;font-weight:700}
 .muted{color:var(--muted)}
 .eb{display:flex;align-items:center;gap:.75rem;font-size:.8125rem;line-height:1.2;font-weight:500;text-transform:uppercase;letter-spacing:.22em;color:var(--muted)}
 .eb::before{content:"";width:.5rem;height:.5rem;border-radius:9999px;background:var(--accent)}
 .lab{font-size:.8125rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}
-/* ink panels: cards and the project modal flip the palette (ink panel, grey type) */
-.pm-card{--bg:oklch(0.150 0 0);--fg:oklch(0.885 0 0);--surface:oklch(0.150 0 0);--surface-2:oklch(0.200 0 0);--muted:oklch(0.885 0 0 / .62);--line:oklch(0.885 0 0 / .16);--line-strong:oklch(0.885 0 0 / .34);--accent:oklch(0.885 0 0);color:var(--fg)}
 /* reveals */
 .m{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em 0;margin:-.14em 0}
 .u{display:inline-block;transform:translateY(110%);opacity:0;transition:transform .9s var(--ex) var(--d,0ms),opacity .9s var(--ex) var(--d,0ms)}
@@ -110,16 +106,16 @@ main{min-height:100svh}
 
 /* loading screen: h-dot logo */
 #pre{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;overflow:hidden;}
-#pre.go{animation:ld-out .45s var(--ex) .55s forwards}
+#pre.go{animation:ld-out .3s var(--ex) .35s forwards}
 .ld-mark{height:9rem;width:auto;overflow:visible;grid-area:1/1}
-.ld-line{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:ld-draw .95s cubic-bezier(.65,0,.35,1) .1s forwards,ld-away .3s linear 1.05s forwards}
-.ld-h{fill:var(--fg);opacity:0;animation:ld-fade .4s linear .75s forwards}
-.ld-drop{opacity:0;transform:translateY(-110px);animation:ld-bounce 1.2s linear 1s both,ld-hop .8s linear 2.3s infinite}
-.go .ld-drop{animation:ld-bounce 1.2s linear 1s both}
+.ld-line{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:ld-draw .55s cubic-bezier(.65,0,.35,1) .05s forwards,ld-away .2s linear .6s forwards}
+.ld-h{fill:var(--fg);opacity:0;animation:ld-fade .3s linear .35s forwards}
+.ld-drop{opacity:0;transform:translateY(-110px);animation:ld-bounce .8s linear .3s both,ld-hop .8s linear 1.1s infinite}
+.go .ld-drop{animation:ld-bounce .8s linear .3s both}
 .ld-dot{fill:var(--accent);transform-box:fill-box;transform-origin:center}
-.go .ld-dot{animation:ld-flood .7s cubic-bezier(.7,0,.84,0) forwards}
-.ld-cap{grid-area:1/1;align-self:end;margin-bottom:12vh;margin-bottom:12dvh;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.32em;color:var(--muted);opacity:0;animation:ld-in .5s var(--ex) .6s forwards}
-.go .ld-cap{animation:ld-in .5s var(--ex) .6s forwards,ld-away .25s linear forwards}
+.go .ld-dot{animation:ld-flood .5s cubic-bezier(.7,0,.84,0) forwards}
+.ld-cap{grid-area:1/1;align-self:end;margin-bottom:12vh;margin-bottom:12dvh;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.32em;color:var(--muted);opacity:0;animation:ld-in .4s var(--ex) .2s forwards}
+.go .ld-cap{animation:ld-in .4s var(--ex) .2s forwards,ld-away .2s linear forwards}
 @keyframes ld-draw{to{stroke-dashoffset:0}}
 @keyframes ld-fade{to{opacity:1}}
 @keyframes ld-bounce{
@@ -131,8 +127,8 @@ main{min-height:100svh}
 90%{opacity:1;transform:translateY(-18px);animation-timing-function:cubic-bezier(.55,0,1,.45)}
 100%{opacity:1;transform:translateY(0)}}
 @keyframes ld-flood{0%{transform:scale(1);animation-timing-function:cubic-bezier(.4,0,.6,1)}18%{transform:scale(.78);animation-timing-function:cubic-bezier(.7,0,.84,0)}100%{transform:scale(140)}}
-.ld-squash{transform-box:fill-box;transform-origin:50% 100%;animation:ld-squash 1.2s linear 1s both,ld-hop-sq .8s linear 2.3s infinite}
-.go .ld-squash{animation:ld-squash 1.2s linear 1s both}
+.ld-squash{transform-box:fill-box;transform-origin:50% 100%;animation:ld-squash .8s linear .3s both,ld-hop-sq .8s linear 1.1s infinite}
+.go .ld-squash{animation:ld-squash .8s linear .3s both}
 @keyframes ld-hop{0%{transform:translateY(0);animation-timing-function:cubic-bezier(0,.55,.45,1)}50%{transform:translateY(-52px);animation-timing-function:cubic-bezier(.55,0,1,.45)}100%{transform:translateY(0)}}
 @keyframes ld-hop-sq{0%{transform:scale(1.15,.85);animation-timing-function:ease-out}12%{transform:scale(.88,1.18)}50%{transform:scale(.94,1.08);animation-timing-function:ease-in}100%{transform:scale(.9,1.14)}}
 @keyframes ld-squash{
@@ -163,7 +159,7 @@ main{min-height:100svh}
 
 
 /* ===== hero, after the lab. layout: big wordmark, grey block, cut-out portrait, vertical tag, ink arrow ===== */
-:root{--block:oklch(0.715 0 0);--pop:oklch(0.591 0.214 33)}
+:root{--block:oklch(0.715 0 0);--pop:oklch(0.591 0.214 33);--on-pop:#fff} /* white on --pop is 4.5:1 */
 .hname .gs{display:inline-block}
 .hname .m{padding:.12em .07em;margin:-.12em -.07em}
 .hname .stop{display:inline-block}
@@ -179,8 +175,7 @@ main{min-height:100svh}
 .tt[aria-pressed="true"] svg{transform:rotate(180deg)}
 .tt[aria-pressed="true"]:hover svg{transform:rotate(205deg)}
 
-html[data-dark]{color-scheme:dark;--pop:oklch(0.667 0.223 34);--bg:oklch(0.150 0 0);--fg:oklch(0.885 0 0);--surface:oklch(0.200 0 0);--surface-2:oklch(0.239 0 0);--muted:oklch(0.633 0 0);--line:oklch(0.885 0 0 / .16);--line-strong:oklch(0.885 0 0 / .34);--accent:oklch(0.885 0 0);--block:oklch(0.409 0 0)}
-html[data-dark] .pm-card{--bg:oklch(0.150 0 0);--fg:oklch(0.885 0 0);--surface:oklch(0.200 0 0);--surface-2:oklch(0.239 0 0);--muted:oklch(0.633 0 0);--line:oklch(0.885 0 0 / .16);--line-strong:oklch(0.885 0 0 / .34);--accent:oklch(0.885 0 0)}
+html[data-dark]{color-scheme:dark;--pop:oklch(0.667 0.223 34);--on-pop:oklch(0.150 0 0);--bg:oklch(0.150 0 0);--fg:oklch(0.885 0 0);--surface:oklch(0.200 0 0);--surface-2:oklch(0.239 0 0);--muted:oklch(0.633 0 0);--line:oklch(0.885 0 0 / .16);--line-strong:oklch(0.885 0 0 / .34);--accent:oklch(0.885 0 0);--block:oklch(0.409 0 0)}
 
 /* dark mode depth: shadows barely show on near-black, so the higher a surface sits the lighter it is */
 html[data-dark] .dock-lab{background:var(--surface-2)}
@@ -194,7 +189,7 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
    --pop: #e03208 on light (3.2:1 on the grey, for large or decorative marks), #ff4b1f on dark (5.9:1).
    Ink stays ink: bands, buttons and big type are unchanged. Vermilion marks: the dot in the logo and the
    period in "daniel.", slashes, nav underline, the typing caret, the scroll-rail dot, hover states. */
-::selection{background:var(--pop);color:#fff}
+::selection{background:var(--pop);color:var(--on-pop)}
 :focus-visible{outline-color:var(--pop)}
 .mark-dot,.ld-dot{fill:var(--pop)}
 .hname .stop{color:var(--pop)}
@@ -229,15 +224,11 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 
 /* projects: one case per row, screenshot and text swap sides */
 .pj-go{margin-top:2rem;display:inline-flex;gap:.6rem;align-items:baseline;font-weight:600;font-size:1.0625rem;padding-bottom:.35rem;border-bottom:1px solid var(--fg);transition:color .3s,border-color .3s,gap .35s var(--ex)}
-.pj-go:hover,.pj-go:focus-visible{color:var(--pop);border-color:var(--pop);gap:1rem}
+.pj-go:hover,.pj-go:focus-visible{border-color:var(--pop);border-bottom-width:2px;gap:1rem}
+.pj-go span{transition:color .3s}.pj-go:hover span,.pj-go:focus-visible span{color:var(--pop)}
 @media(min-width:1024px){
 }
 
-/* project view: simple fade and rise */
-.pm{animation:pm-fade .25s ease-out}
-.pm-card{animation:pm-up .45s var(--ex)}
-@keyframes pm-fade{from{opacity:0}}
-@keyframes pm-up{from{opacity:0;transform:translateY(36px) scale(.97)}}
 
 
 /* skills: code-editor panel + swapping photos (themed, Onest type, mono accents) */
@@ -258,12 +249,10 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .ed-hd{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem}
 .ed-c{font-family:var(--mono);font-size:.8125rem;color:var(--em)}
 .ed-avg{display:flex;align-items:baseline;gap:.5rem;line-height:.85;font-weight:700;letter-spacing:-.05em;font-size:clamp(3.25rem,13vw,5.5rem);font-variant-numeric:tabular-nums}
-.ed-avg em,.ed-p em{font-style:normal;color:var(--ea)}
 .ed-avg small{font-family:var(--mono);font-size:.75rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--em)}
-.ed-r{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n p" "t t" "s s";gap:.4rem .75rem;align-items:baseline;padding:.9rem 0;border-top:1px solid var(--el);animation:edin .6s var(--ex) both;animation-delay:calc(var(--i)*80ms);transition:opacity .3s}
+.ed-r{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"n s" "t t";gap:.4rem .75rem;align-items:baseline;padding:.9rem 0;border-top:1px solid var(--el);animation:edin .6s var(--ex) both;animation-delay:calc(var(--i)*80ms);transition:opacity .3s}
 .ed-n{grid-area:n;font-size:1.25rem;line-height:1.2;font-weight:600;letter-spacing:-.02em;overflow-wrap:anywhere}
-.ed-p{grid-area:p;font-size:1.5rem;line-height:1;font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.ed-s{grid-area:s;font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--em)}
+.ed-s{grid-area:s;text-align:right;font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--em)}
 .ed-t{grid-area:t;display:block;height:.6rem;background:color-mix(in srgb,var(--fg) 14%,transparent);-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 calc(5% - 3px),transparent calc(5% - 3px) 5%);mask-image:repeating-linear-gradient(90deg,#000 0 calc(5% - 3px),transparent calc(5% - 3px) 5%)}
 .ed-t b{display:block;height:100%;width:0;background:var(--ea)}
 .ed.on .ed-t b{width:var(--w);animation:edfill 1s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*80ms + 150ms)}
@@ -285,8 +274,7 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .gp{display:block;width:100%;aspect-ratio:3/4;overflow:hidden;cursor:pointer;background:var(--surface-2)}
 .gp canvas{display:block;width:100%;height:100%}
 @media(min-width:640px){.ed-dots{display:flex}.ed-body{padding:1.75rem 2rem 1.5rem}.ed-foot{padding:.6rem 2rem}
-.ed-r{grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) 4.5rem 7rem;grid-template-areas:"n t p s";align-items:center}
-.ed-p{text-align:right}.ed-s{text-align:right}}
+.ed-r{grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) 7rem;grid-template-areas:"n t s";align-items:center}}
 
 /* about page only: one type system with Home, clearer hierarchy, usable focus + hover */
 .about .pr>div{transition:opacity .3s}
@@ -312,7 +300,7 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .dock-ic{width:48px;height:48px}
 .dock-ic svg{width:22px;height:22px}
 .dock svg{stroke-width:calc(.75rem * .1)}.dock svg *{vector-effect:non-scaling-stroke} /* stroke weight ~ the stem of the 500-weight labels */
-.dock-list a.on .dock-ic{background:linear-gradient(150deg in oklch,color-mix(in oklch,var(--pop) 80%,#fff),var(--pop));color:#fff}
+.dock-list a.on .dock-ic{background:linear-gradient(150deg in oklch,color-mix(in oklch,var(--pop) 80%,#fff),var(--pop));color:var(--on-pop)}
 .dock-lab{position:absolute;right:58px;top:50%;translate:0 -50%;white-space:nowrap;padding:.45rem .8rem;border-radius:9999px;background:var(--bg);color:var(--fg);border:1px solid var(--line-strong);font-size:.75rem;font-weight:500;line-height:1;text-transform:uppercase;letter-spacing:.16em}
 .dock-list a:focus-visible .dock-ic,.dock-fab:focus-visible{outline:2px solid var(--pop);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.dock *{transition-duration:.01ms!important;transition-delay:0ms!important}}
@@ -331,10 +319,10 @@ html[data-dark] .dock-lab{background:var(--surface-2)}
 .l3-tilt,.l3-sway,.l3-stage{position:absolute;inset:0;transform-style:preserve-3d}
 .l3-stage{transform:rotateX(8deg) rotateY(-26deg) rotateZ(-3deg)} /* the base tilt: change these angles to tilt it more or less */
 .l3-layer{position:absolute;left:50%;top:50%;height:84%;aspect-ratio:152/216;width:auto;overflow:visible}
-.l3-shadow{position:absolute;left:50%;bottom:2%;width:62%;height:9%;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);filter:blur(6px)}
+.l3-shadow{position:absolute;left:50%;bottom:2%;width:62%;height:9%;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgb(11 11 11/.45),transparent);filter:blur(6px)}
 
 /* ===== kept effects, mobile-first ===== */
-.btn:hover{background:var(--pop);color:#fff}
+.btn:hover{background:var(--pop);color:var(--on-pop)}
 .harrow-lbl{font-weight:600}
 /* contact page 3D logo: stacked under the text on phones/tablets, floating beside it from 1024px */
 .l3{position:relative;width:min(78vw,380px);margin:3rem auto 0;aspect-ratio:1;perspective:1400px;pointer-events:none}

@@ -20,7 +20,7 @@ const GMAIL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponen
 export default function Contact() {
   return (
     <section id="contact" className="relative px-(--gutter) pt-26 pb-(--section) md:pt-48">
-      <Split as="h2" className="d mt-6 max-w-[18ch] text-[clamp(2.5rem,11vw,5rem)] leading-[.95] sm:text-[clamp(5rem,10vw,7.5rem)]" text="Let's work together." mode="c" step={40} />
+      <Split as="h2" className="d mt-6 max-w-[14ch] text-[clamp(2.75rem,12vw,4.5rem)] leading-none sm:text-[clamp(4.5rem,9vw,7.5rem)]" text="Let's work together." mode="c" step={40} />
       <Reveal as="p" className="mt-8 max-w-[44ch] text-[1.375rem] leading-[1.45] text-muted">I'm open to internships and projects. Send me an email and I'll reply.</Reveal>
       <div className="mt-12 flex max-w-full flex-col items-start gap-4">
         <PillLink href={GMAIL} label={EMAIL} icon={<GmailIcon />} external />

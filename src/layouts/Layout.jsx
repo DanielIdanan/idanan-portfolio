@@ -9,7 +9,8 @@ import Preloader from '../components/Preloader.jsx'
 import PageWipe from '../components/PageWipe.jsx'
 import ScrollRail from '../components/ScrollRail.jsx'
 import { Ctx } from '../lib/ctx.js'
-import { reduce } from '../lib/motion.js'
+import { reduce, skipIntro } from '../lib/motion.js'
+import { projects } from '../data/projects.js'
 
 const EASE = 'power4.inOut' // cubic-bezier(.76,0,.24,1): slow start, fast middle, soft landing
 const ARCH = 14 // how much the curtain's edge bows (% of screen height)
@@ -25,7 +26,7 @@ export default function Layout() {
   const logo = useRef(null)
   const covered = useRef(false)
   const busy = useRef(false)
-  const pending = useRef(!reduce) // true while the preloader or page curtain is still running
+  const pending = useRef(!skipIntro) // true while the preloader or page curtain is still running
   const queue = useRef(new Set())
   const st = useRef({ p: 0, l: 0 }) // p: curtain 0..1, l: logo opacity 0..1
 
@@ -56,12 +57,12 @@ export default function Layout() {
     return () => queue.current.delete(fn)
   }, [])
 
-  // Smooth scroll; locked until the preloader finishes.
+  // Smooth scroll; locked until the preloader finishes (when there is one).
   useEffect(() => {
     if (reduce) return
     const l = new Lenis({ autoRaf: true })
     l.on('scroll', ScrollTrigger.update)
-    l.stop()
+    if (!skipIntro) l.stop()
     lenis.current = l
     return () => { l.destroy(); lenis.current = null }
   }, [])
@@ -70,11 +71,12 @@ export default function Layout() {
   useLayoutEffect(() => {
     if (lenis.current) lenis.current.scrollTo(0, { immediate: true })
     else window.scrollTo(0, 0)
-    document.title = TITLES[pathname] || 'Page not found | Daniel D. Idanan'
+    const proj = pathname.startsWith('/projects/') && projects.find((p) => '/projects/' + p.slug === pathname)
+    document.title = proj ? `${proj.title} | Projects | Daniel D. Idanan` : TITLES[pathname] || 'Page not found | Daniel D. Idanan'
     if (!covered.current) return
     covered.current = false
-    gsap.to(st.current, { l: 0, duration: 0.2, delay: 0.55, ease: 'none', onUpdate: fade })
-    gsap.to(st.current, { p: 0, duration: 0.7, delay: 0.7, ease: EASE, onUpdate: draw, onComplete: () => { busy.current = false; flush() } })
+    gsap.to(st.current, { l: 0, duration: 0.15, delay: 0.25, ease: 'none', onUpdate: fade })
+    gsap.to(st.current, { p: 0, duration: 0.55, delay: 0.35, ease: EASE, onUpdate: draw, onComplete: () => { busy.current = false; flush() } })
   }, [pathname, flush])
 
   // Curtain drops over the page, the logo fades in, then the route changes underneath it.
@@ -84,8 +86,8 @@ export default function Layout() {
     busy.current = true
     covered.current = true
     pending.current = true
-    gsap.to(st.current, { l: 1, duration: 0.3, delay: 0.3, ease: 'none', onUpdate: fade })
-    gsap.to(st.current, { p: 1, duration: 0.55, ease: EASE, onUpdate: draw, onComplete: () => navigate(to) })
+    gsap.to(st.current, { l: 1, duration: 0.2, delay: 0.2, ease: 'none', onUpdate: fade })
+    gsap.to(st.current, { p: 1, duration: 0.45, ease: EASE, onUpdate: draw, onComplete: () => navigate(to) })
   }, [pathname, navigate])
 
   const unlock = useCallback(() => { lenis.current?.start(); flush() }, [flush])
@@ -93,7 +95,7 @@ export default function Layout() {
 
   return (
     <Ctx.Provider value={ctx}>
-      {!reduce && <Preloader onDone={unlock} />}
+      {!skipIntro && <Preloader onDone={unlock} />}
       <PageWipe wipeRef={wipe} pathRef={path} logoRef={logo} />
       <a className="skip" href="#main">Skip to content</a>
       <ScrollRail />
