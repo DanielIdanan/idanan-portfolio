@@ -4,27 +4,25 @@ import Logo3D from '../components/Logo3D.jsx'
 import PillLink, { GmailIcon, GithubIcon } from '../components/PillLink.jsx'
 
 const EMAIL = 'itzme.guyzzz@gmail.com'
-const SUBJECT = 'Working together on [project]?'
+const SUBJECT = 'Working together'
 const BODY = `Hi Daniel,
 
-I saw your work and I'd like to see if you'd be open to working with me on [project]. I need someone to [what you need done], and you look like a good fit for it.
-
-I'm flexible on how we do it. It could be a paid contract, a one-time job, or something ongoing, depending on what works for you. If you're interested, I can send over the scope, timeline, and budget.
+I saw your portfolio and I'd like to talk about working with you.
 
 Are you taking on new work right now? If so, a quick reply here or a short call would be great.
 
 Thanks,
-[Your name]`
+`
 // Opens a Gmail compose window in a new tab. Unlike mailto:, this works even when
 // the visitor has no desktop mail app set up (which is why the old link "did nothing").
 const GMAIL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(SUBJECT)}&body=${encodeURIComponent(BODY)}`
 
 export default function Contact() {
   return (
-    <section id="contact" className="pt-top">
-      <Split as="h2" className="d" text="Let's work together." mode="c" step={40} />
-      <Reveal as="p" className="lead">I'm open to internships and projects. Send me an email and I'll reply.</Reveal>
-      <div className="pills">
+    <section id="contact" className="relative px-(--gutter) pt-26 pb-(--section) md:pt-48">
+      <Split as="h2" className="d mt-6 max-w-[18ch] text-[clamp(2.5rem,11vw,5rem)] leading-[.95] sm:text-[clamp(5rem,10vw,7.5rem)]" text="Let's work together." mode="c" step={40} />
+      <Reveal as="p" className="mt-8 max-w-[44ch] text-[1.375rem] leading-[1.45] text-muted">I'm open to internships and projects. Send me an email and I'll reply.</Reveal>
+      <div className="mt-12 flex max-w-full flex-col items-start gap-4">
         <PillLink href={GMAIL} label={EMAIL} icon={<GmailIcon />} external />
         <PillLink href="https://github.com/DanielIdanan" label="github.com/DanielIdanan" icon={<GithubIcon />} delay={0.3} external />
       </div>

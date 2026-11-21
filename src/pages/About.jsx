@@ -51,10 +51,10 @@ function Skills() {
   const g = skillGroups[active]
   const avg = Math.round(g.items.reduce((t, x) => t + x.level, 0) / g.items.length)
   return (
-    <section className="pad">
-      <Split className="d h2" text="Skills & tools." />
-      <div className="skx">
-        <div className="skc">
+    <section className="px-(--gutter) py-(--section)">
+      <Split className="font-sans font-bold normal-case tracking-[-.05em] leading-none text-balance text-[clamp(3.5rem,12vw,9rem)]" text="Skills & tools." />
+      <div className="mt-16 grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-(--gutter)">
+        <div className="grid min-w-0 gap-6 lg:col-span-8">
         <div ref={ref} className={'fu ed' + (on ? ' on' : '')} style={{ '--d': '0ms', '--sc': '1.04', '--t': '.64s' }}>
           <div className="ed-bar">
             <span className="ed-dots" aria-hidden="true"><i /><i /><i /></span>
@@ -101,7 +101,7 @@ function Skills() {
           </ul>
         </div>
         </div>
-        <Reveal className="skw" sc="1.06" t=".64s">
+        <Reveal className="w-full max-w-116 lg:col-span-4 lg:justify-self-start" sc="1.06" t=".64s">
           <GlitchPhoto />
         </Reveal>
       </div>
@@ -112,19 +112,22 @@ function Skills() {
 export default function About() {
   return (
     <div className="about">
-      <section className="pad story pt-top">
-        <div className="grid">
-          <div>
-            <Split className="d" text="I learn by doing." />
-            <Reveal as="p" className="lead" delay={200}>{bio[0]}</Reveal>
-            <Reveal as="p" className="lead" delay={300}>{bio[1]}</Reveal>
+      <section className="story px-(--gutter) pt-26 pb-[calc(var(--section)*1.3)] md:pt-48">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-x-[calc(var(--gutter)*2.5)]">
+          <div className="lg:sticky lg:top-28 lg:col-span-5">
+            <Split className="font-sans font-bold normal-case tracking-[-.05em] leading-none text-balance mt-6 text-[clamp(3.25rem,8vw,6.5rem)]" text="I learn by doing." />
+            <Reveal as="p" className="mt-10 max-w-[46ch] text-[clamp(1.25rem,1.6vw,1.5rem)] leading-[1.6] tracking-[-.01em] text-fg" delay={200}>{bio[0]}</Reveal>
+            <Reveal as="p" className="mt-5 max-w-[46ch] text-[clamp(1.25rem,1.6vw,1.5rem)] leading-[1.6] tracking-[-.01em] text-fg" delay={300}>{bio[1]}</Reveal>
           </div>
-          <div>
-            <div className="eb" style={{ marginBottom: '1.5rem' }}>OJT at the City Assessor's Office</div>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <div className="eb mb-6">OJT at the City Assessor's Office</div>
             <ul className="ojt">
               {ojt.map(([title, text]) => (
-                <Reveal as="li" className="pr" key={title} t=".56s">
-                  <div><h3>{title}</h3><p>{text}</p></div>
+                <Reveal as="li" className="pr relative border-t border-line py-7 last:border-b md:py-14 lg:first:pt-8" key={title} t=".56s">
+                  <div>
+                    <h3 className="mb-1 text-2xl leading-[1.15] font-semibold tracking-[-.02em] md:text-[1.75rem]">{title}</h3>
+                    <p className="mt-4 max-w-[44ch] leading-[1.7] text-muted">{text}</p>
+                  </div>
                 </Reveal>
               ))}
             </ul>

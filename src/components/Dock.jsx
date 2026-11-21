@@ -31,7 +31,7 @@ export default function Dock() {
   }
 
   return (
-    <div className={'dock' + (open ? ' open' : '')}>
+    <div className={'dock md:hidden' + (open ? ' open' : '')}>
       <button className="dock-scrim" tabIndex={-1} aria-hidden="true" onClick={() => setOpen(false)} />
       <nav aria-label="Mobile">
         <ul className="dock-list">

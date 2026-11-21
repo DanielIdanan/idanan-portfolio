@@ -70,7 +70,7 @@ export default function Layout() {
   useLayoutEffect(() => {
     if (lenis.current) lenis.current.scrollTo(0, { immediate: true })
     else window.scrollTo(0, 0)
-    document.title = TITLES[pathname] || TITLES['/']
+    document.title = TITLES[pathname] || 'Page not found | Daniel D. Idanan'
     if (!covered.current) return
     covered.current = false
     gsap.to(st.current, { l: 0, duration: 0.2, delay: 0.55, ease: 'none', onUpdate: fade })

@@ -5,7 +5,7 @@ import { toggleDark, useDark } from '../lib/theme.js'
 export default function ThemeToggle() {
   const on = useDark()
   return (
-    <button type="button" className="tt" onClick={toggleDark} aria-pressed={on} aria-label="Dark mode" title={on ? 'Dark mode: on' : 'Dark mode: off'}>
+    <button type="button" className="tt min-h-11 min-w-11 md:min-h-0 md:min-w-0" onClick={toggleDark} aria-pressed={on} aria-label="Dark mode" title={on ? 'Dark mode: on' : 'Dark mode: off'}>
       <svg viewBox="0 0 256 256" aria-hidden="true">
         <path fill="currentColor" d="M47.1 62.7A104 104 0 0 0 193.3 208.9Z" />
         <path fill="currentColor" d="M208.9 193.3A104 104 0 0 0 62.7 47.1L78.3 62.8A82 82 0 0 1 193.2 177.7Z" />

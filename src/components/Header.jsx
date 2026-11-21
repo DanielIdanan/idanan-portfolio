@@ -20,14 +20,14 @@ export default function Header() {
     go(to)
   }
   return (
-    <header>
-      <nav className="top" aria-label="Primary">
-        <NavLink to="/" className="logo" onClick={nav('/')}>
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
+      <nav className="pointer-events-auto flex items-center justify-between px-(--gutter) py-6" aria-label="Primary">
+        <NavLink to="/" className="logo flex items-center gap-3" onClick={nav('/')}>
           <span className="mono"><Logo /></span>
-          <span className="nm">Daniel Idanan</span>
+          <span className="hidden text-[.8125rem] font-medium tracking-[.22em] text-muted uppercase sm:block">Daniel Idanan</span>
         </NavLink>
-        <div className="navr">
-          <ul className="links">
+        <div className="flex items-center gap-5 md:gap-7">
+          <ul className="links hidden gap-10 md:flex">
             {links.map((l) => (
               <li key={l.to}><NavLink to={l.to} end onClick={nav(l.to)}>{l.label}</NavLink></li>
             ))}
